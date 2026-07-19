@@ -229,6 +229,12 @@ function createImagePage(page, index, total) {
 
 function createContentPage(page, index, total) {
   const element = createBasePage(page);
+  const templateId = getActiveTemplateId();
+
+  if (templateId === "editorial-modern") {
+    element.innerHTML = renderEditorialContentPage(page, index, total);
+    return element;
+  }
 
   element.innerHTML = `
     <div class="page-inner">
@@ -261,6 +267,13 @@ function createContentPage(page, index, total) {
 
 function createSplitPage(page, index, total) {
   const element = createBasePage(page);
+  const templateId = getActiveTemplateId();
+
+  if (templateId === "editorial-modern") {
+    element.innerHTML = renderEditorialSplitPage(page, index, total);
+    return element;
+  }
+
   const imageMarkup = page.imageSrc
     ? `<div class="page-image"><img src="${escapeHtml(page.imageSrc)}" alt="${escapeHtml(
         page.alt || ""
@@ -295,6 +308,77 @@ function createSplitPage(page, index, total) {
   `;
 
   return element;
+}
+
+function renderEditorialContentPage(page, index, total) {
+  return `
+    <div class="page-inner editorial-page-shell">
+      <div class="editorial-topline">
+        <span class="editorial-kicker">${escapeHtml(page.eyebrow || window.weddingConfig.couple?.displayName || "Convite")}</span>
+        <span class="editorial-index">${String(index + 1).padStart(2, "0")}</span>
+      </div>
+      <div class="editorial-grid editorial-grid--content">
+        <div class="page-copy page-copy--editorial">
+          <div class="page-copy-main content-stack-lg">
+            ${page.title ? `<h2 class="page-title editorial-title">${escapeHtml(page.title)}</h2>` : ""}
+            ${renderDescriptions(page.description)}
+            ${renderList(page.list)}
+            ${page.quote ? `<blockquote class="page-quote editorial-quote">${escapeHtml(page.quote)}</blockquote>` : ""}
+          </div>
+        </div>
+        <aside class="editorial-sidebar">
+          <div class="editorial-sidebar-block">
+            ${renderFacts(page.facts)}
+            ${page.showEvent ? renderEventBlock() : ""}
+            ${page.showCountdown ? renderCountdownBlock() : ""}
+            ${page.showActions ? renderActionLinks() : ""}
+            ${page.showPix ? renderPixBlock() : ""}
+          </div>
+          ${renderPageFooter(index, total)}
+        </aside>
+      </div>
+    </div>
+  `;
+}
+
+function renderEditorialSplitPage(page, index, total) {
+  const imageMarkup = page.imageSrc
+    ? `<div class="page-image editorial-image"><img src="${escapeHtml(page.imageSrc)}" alt="${escapeHtml(
+        page.alt || ""
+      )}" style="object-fit:${escapeHtml(page.imageFit || "cover")}" /></div>`
+    : "";
+
+  return `
+    <div class="page-inner editorial-page-shell">
+      <div class="editorial-topline">
+        <span class="editorial-kicker">${escapeHtml(page.eyebrow || "Historia")}</span>
+        <span class="editorial-index">${String(index + 1).padStart(2, "0")}</span>
+      </div>
+      <div class="editorial-grid editorial-grid--split">
+        <div class="editorial-story-column">
+          ${imageMarkup}
+          <div class="page-copy page-copy--editorial">
+            <div class="page-copy-main content-stack-lg">
+              ${page.title ? `<h2 class="page-title editorial-title">${escapeHtml(page.title)}</h2>` : ""}
+              ${renderDescriptions(page.description)}
+            </div>
+          </div>
+        </div>
+        <aside class="editorial-sidebar">
+          <div class="editorial-sidebar-block">
+            ${renderFacts(page.facts)}
+            ${renderList(page.list)}
+            ${page.showEvent ? renderEventBlock() : ""}
+            ${page.showCountdown ? renderCountdownBlock() : ""}
+            ${page.showActions ? renderActionLinks() : ""}
+            ${page.showPix ? renderPixBlock() : ""}
+          </div>
+          ${page.quote ? `<blockquote class="page-quote editorial-quote">${escapeHtml(page.quote)}</blockquote>` : ""}
+          ${renderPageFooter(index, total)}
+        </aside>
+      </div>
+    </div>
+  `;
 }
 
 function renderDescriptions(items) {
