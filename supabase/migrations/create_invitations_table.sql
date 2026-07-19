@@ -6,7 +6,6 @@ values (
   {
     "meta": {
       "pageTitle": "Júlia & Renan | Nosso Casamento",
-      "description": "Venha celebrar conosco o início do nosso próximo capítulo."
     },
     "theme": {
       "background": "#1e2522",
@@ -80,11 +79,6 @@ values (
         "density": "soft",
         "eyebrow": "Save The Date",
         "title": "O grande dia está chegando.",
-        "description": [
-          "Criamos este espaço para compartilhar com você todos os detalhes da nossa celebração.",
-          "Navegue pelas páginas arrastando o dedo ou clicando nos cantos do livro."
-        ],
-        "quote": "O amor não consiste em olhar um para o outro, mas em olhar juntos na mesma direção."
       },
       {
         "id": "details",

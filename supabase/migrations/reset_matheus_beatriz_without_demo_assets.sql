@@ -35,7 +35,6 @@ values (
     "event": {
       "dateISO": "2028-09-14T16:30:00-03:00",
       "dateLabel": "14 de setembro de 2028, as 16h30",
-      "ceremonyLabel": "Cerimonia e recepcao ao entardecer",
       "venueName": "Villa Toscana Eventos",
       "venueAddress": "Alameda das Oliveiras, 2450 - Vinhedo, SP",
       "mapsUrl": "https://maps.google.com/?q=Villa+Toscana+Eventos+Vinhedo+SP"
@@ -109,7 +108,6 @@ values (
           "Agora queremos viver esse novo capitulo cercados pelas pessoas que fazem parte da nossa caminhada."
         ],
         "list": [
-          "Cerimonia e recepcao no mesmo local.",
           "Clima intimista ao entardecer.",
           "Um dia pensado para ser lembrado com carinho."
         ]

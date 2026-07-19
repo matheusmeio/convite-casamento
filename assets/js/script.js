@@ -396,9 +396,6 @@ function renderTimelessActions(index, total) {
       <div class="timeless-page-main">
         <p class="timeless-overline">Informacoes importantes</p>
         <h2 class="timeless-title">Toque nos botoes para interagir</h2>
-        <div class="timeless-copy">
-          <p>${escapeHtml(event.ceremonyLabel || "Cerimonia e recepcao")}.</p>
-        </div>
         ${renderActionLinks()}
         ${renderPixBlock()}
       </div>

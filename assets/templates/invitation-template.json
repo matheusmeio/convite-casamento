@@ -30,7 +30,6 @@
   "event": {
     "dateISO": "2028-01-01T16:00:00-03:00",
     "dateLabel": "01 de janeiro de 2028, as 16h00",
-    "ceremonyLabel": "Cerimonia e recepcao",
     "venueName": "Nome do espaco",
     "venueAddress": "Endereco completo do evento",
     "mapsUrl": "https://maps.google.com/?q=Endereco+do+evento"

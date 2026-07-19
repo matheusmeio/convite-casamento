@@ -118,7 +118,6 @@ values (
           "Queremos que este convite ja antecipe a atmosfera do dia: acolhedora, elegante e sem excessos."
         ],
         "list": [
-          "Cerimonia e recepcao no mesmo local.",
           "Dress code leve em tons suaves.",
           "Uma experiencia pensada para celular e desktop."
         ]

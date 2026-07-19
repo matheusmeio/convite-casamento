@@ -13,7 +13,6 @@ function createDefaultFormState() {
     brideName: "Laura",
     groomName: "Pedro",
     dateTime: "2028-09-14T16:30",
-    ceremonyLabel: "Cerimonia e recepcao",
     venueName: "Villa Toscana Eventos",
     venueAddress: "Alameda das Oliveiras, 2450 - Vinhedo, SP",
     mapsUrl: "https://maps.google.com/?q=Villa+Toscana+Eventos+Vinhedo+SP",
@@ -67,7 +66,6 @@ function buildInvitationConfig(formState) {
     event: {
       dateISO,
       dateLabel: longDateLabel,
-      ceremonyLabel: normalizeText(formState.ceremonyLabel, "Cerimonia e recepcao"),
       venueName: normalizeText(formState.venueName, "Villa Toscana Eventos"),
       venueAddress: normalizeText(
         formState.venueAddress,
