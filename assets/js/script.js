@@ -355,11 +355,13 @@ function renderTimelessSaveDate(index, total) {
     <div class="page-inner timeless-page-shell timeless-page-shell--save-date">
       <div class="timeless-page-main timeless-page-main--center">
         <div class="timeless-save-lockup">
-          <span class="timeless-save-word">SAVE</span>
+          <span class="timeless-save-word timeless-save-word--top">SAVE</span>
           <span class="timeless-save-script">the</span>
-          <span class="timeless-save-word">DATE</span>
+          <span class="timeless-save-word timeless-save-word--bottom">DATE</span>
         </div>
-        <p class="timeless-date-feature">${escapeHtml(dateParts.saveDateLine)}</p>
+        <p class="timeless-date-feature">
+          <span>${escapeHtml(dateParts.saveDateLine)}</span>
+        </p>
       </div>
       ${renderPageFooter(index, total)}
     </div>
@@ -377,10 +379,14 @@ function renderTimelessDetails(index, total) {
         <h2 class="timeless-names timeless-names--details">${renderNamesMarkup()}</h2>
         <div class="timeless-divider"></div>
         <div class="timeless-details-stack">
-          <p class="timeless-date-block">${escapeHtml(dateParts.numericDate)}</p>
-          <p class="timeless-date-meta">${escapeHtml(dateParts.weekdayTimeLine)}</p>
-          <p class="timeless-location">${escapeHtml(event.venueName || "")}</p>
-          <p class="timeless-location-sub">${escapeHtml(event.venueAddress || "")}</p>
+          <div class="timeless-date-frame">
+            <p class="timeless-date-block">${escapeHtml(dateParts.numericDate)}</p>
+            <p class="timeless-date-meta">${escapeHtml(dateParts.weekdayTimeLine)}</p>
+          </div>
+          <div class="timeless-location-frame">
+            <p class="timeless-location">${escapeHtml(event.venueName || "")}</p>
+            <p class="timeless-location-sub">${escapeHtml(event.venueAddress || "")}</p>
+          </div>
         </div>
       </div>
       ${renderPageFooter(index, total)}
@@ -427,8 +433,8 @@ function renderMonogram() {
 
   return `
     <div class="timeless-monogram" aria-hidden="true">
-      <span>${escapeHtml(brideInitial)}</span>
-      <span>${escapeHtml(groomInitial)}</span>
+      <span class="timeless-monogram-letter timeless-monogram-letter--first">${escapeHtml(brideInitial)}</span>
+      <span class="timeless-monogram-letter timeless-monogram-letter--second">${escapeHtml(groomInitial)}</span>
     </div>
   `;
 }

@@ -39,13 +39,10 @@ function cacheElements() {
     "brideNameInput",
     "groomNameInput",
     "dateTimeInput",
-    "ceremonyLabelInput",
-    "venueNameInput",
     "venueAddressInput",
     "mapsUrlInput",
     "rsvpUrlInput",
     "pixKeyInput",
-    "pixCopyPasteInput",
     "audioSrcInput",
     "configPreview",
     "sqlOutput",
@@ -79,13 +76,10 @@ function bindEvents() {
     "brideNameInput",
     "groomNameInput",
     "dateTimeInput",
-    "ceremonyLabelInput",
-    "venueNameInput",
     "venueAddressInput",
     "mapsUrlInput",
     "rsvpUrlInput",
     "pixKeyInput",
-    "pixCopyPasteInput",
     "audioSrcInput"
   ].forEach((id) => {
     const eventName = id === "publishedInput" ? "change" : "input";
@@ -281,13 +275,10 @@ function fillForm(formState) {
   ui.brideNameInput.value = formState.brideName || "";
   ui.groomNameInput.value = formState.groomName || "";
   ui.dateTimeInput.value = formState.dateTime || "";
-  ui.ceremonyLabelInput.value = formState.ceremonyLabel || "";
-  ui.venueNameInput.value = formState.venueName || "";
   ui.venueAddressInput.value = formState.venueAddress || "";
   ui.mapsUrlInput.value = formState.mapsUrl || "";
   ui.rsvpUrlInput.value = formState.rsvpUrl || "";
   ui.pixKeyInput.value = formState.pixKey || "";
-  ui.pixCopyPasteInput.value = formState.pixCopyPaste || "";
   ui.audioSrcInput.value = formState.audioSrc || "";
   refreshPreviewLink();
   refreshDerivedOutputs();
@@ -300,13 +291,10 @@ function readFormState() {
     brideName: ui.brideNameInput.value.trim(),
     groomName: ui.groomNameInput.value.trim(),
     dateTime: ui.dateTimeInput.value,
-    ceremonyLabel: ui.ceremonyLabelInput.value.trim(),
-    venueName: ui.venueNameInput.value.trim(),
     venueAddress: ui.venueAddressInput.value.trim(),
     mapsUrl: ui.mapsUrlInput.value.trim(),
     rsvpUrl: ui.rsvpUrlInput.value.trim(),
     pixKey: ui.pixKeyInput.value.trim(),
-    pixCopyPaste: ui.pixCopyPasteInput.value.trim(),
     audioSrc: ui.audioSrcInput.value.trim()
   };
 }

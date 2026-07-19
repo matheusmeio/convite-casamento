@@ -13,14 +13,11 @@ function createDefaultFormState() {
     brideName: "Laura",
     groomName: "Pedro",
     dateTime: "2028-09-14T16:30",
-    venueName: "Villa Toscana Eventos",
     venueAddress: "Alameda das Oliveiras, 2450 - Vinhedo, SP",
     mapsUrl: "https://maps.google.com/?q=Villa+Toscana+Eventos+Vinhedo+SP",
     rsvpUrl:
       "https://wa.me/5511987654321?text=Ola%2C+quero+confirmar+presenca+no+casamento+de+Laura+e+Pedro.",
     pixKey: "presentes.laura.pedro@email.com",
-    pixCopyPaste:
-      "00020126580014BR.GOV.BCB.PIX0137presentes.laura.pedro@email.com5204000053039865406150.005802BR5914LAURA E PEDRO6009SAO PAULO62070503***6304ABCD",
     audioSrc: ""
   };
 }
@@ -64,7 +61,7 @@ function buildInvitationConfig(formState) {
     event: {
       dateISO,
       dateLabel: longDateLabel,
-      venueName: normalizeText(formState.venueName, "Villa Toscana Eventos"),
+      venueName: buildVenueName(formState.venueAddress),
       venueAddress: normalizeText(
         formState.venueAddress,
         "Alameda das Oliveiras, 2450 - Vinhedo, SP"
@@ -83,7 +80,7 @@ function buildInvitationConfig(formState) {
         label: "Presente via PIX",
         beneficiary,
         key: normalizeText(formState.pixKey, ""),
-        copyPaste: normalizeText(formState.pixCopyPaste, "")
+        copyPaste: normalizeText(formState.pixKey, "")
       }
     },
     book: {
@@ -117,16 +114,10 @@ function extractInvitationFormState(config) {
     brideName,
     groomName,
     dateTime: normalizeDateTimeForInput(config?.event?.dateISO, defaults.dateTime),
-    ceremonyLabel: normalizeText(config?.event?.ceremonyLabel, defaults.ceremonyLabel),
-    venueName: normalizeText(config?.event?.venueName, defaults.venueName),
     venueAddress: normalizeText(config?.event?.venueAddress, defaults.venueAddress),
     mapsUrl: normalizeUrl(config?.event?.mapsUrl || defaults.mapsUrl),
     rsvpUrl: normalizeUrl(rsvpUrl),
     pixKey: normalizeText(config?.actions?.pix?.key, defaults.pixKey),
-    pixCopyPaste: normalizeText(
-      config?.actions?.pix?.copyPaste,
-      defaults.pixCopyPaste
-    ),
     audioSrc: normalizeUrl(config?.audio?.src || "")
   };
 }
@@ -149,6 +140,15 @@ function buildRsvpLinks(rsvpUrl) {
 function normalizeText(value, fallback) {
   const normalizedValue = String(value || "").trim();
   return normalizedValue || fallback;
+}
+
+function buildVenueName(venueAddress) {
+  const normalizedAddress = normalizeText(
+    venueAddress,
+    "Alameda das Oliveiras, 2450 - Vinhedo, SP"
+  );
+
+  return normalizedAddress.split(" - ")[0].trim();
 }
 
 function normalizeUrl(value) {
