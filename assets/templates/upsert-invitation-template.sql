@@ -1,0 +1,83 @@
+insert into public.invitations (slug, is_published, config)
+values (
+  'slug-do-casal',
+  true,
+  $json$
+  {
+    "meta": {
+      "pageTitle": "Nome 1 & Nome 2 | Convite de Casamento",
+      "description": "Convite digital de casamento com experiencia flipbook."
+    },
+    "theme": {
+      "background": "#f6efe7",
+      "surface": "#fffaf4",
+      "surfaceStrong": "#f1e6d7",
+      "ink": "#261f1a",
+      "muted": "#6f655d",
+      "accent": "#b18b5e",
+      "accentStrong": "#7d5d37"
+    },
+    "hero": {
+      "overline": "Convite de casamento",
+      "headline": "Uma celebracao contada em paginas",
+      "subheadline": "Personalize este template com os dados do casal e os links do evento.",
+      "primaryCtaLabel": "Abrir convite",
+      "secondaryCtaLabel": "Ver local"
+    },
+    "couple": {
+      "brideName": "Nome 1",
+      "groomName": "Nome 2",
+      "displayName": "Nome 1 & Nome 2",
+      "storyHeadline": "01 de janeiro de 2028"
+    },
+    "event": {
+      "dateISO": "2028-01-01T16:00:00-03:00",
+      "dateLabel": "01 de janeiro de 2028, as 16h00",
+      "ceremonyLabel": "Cerimonia e recepcao",
+      "venueName": "Nome do espaco",
+      "venueAddress": "Endereco completo do evento",
+      "mapsUrl": "https://maps.google.com/?q=Endereco+do+evento"
+    },
+    "audio": {
+      "src": "",
+      "autoplay": false,
+      "loop": true,
+      "label": "Trilha do casal"
+    },
+    "actions": {
+      "rsvpLinks": [
+        {
+          "label": "Confirmar presenca",
+          "url": "https://wa.me/5500000000000?text=Ola%2C+quero+confirmar+presenca."
+        }
+      ],
+      "pix": {
+        "label": "Presente via PIX",
+        "beneficiary": "Nome 1 e Nome 2",
+        "key": "pix@casal.com.br",
+        "copyPaste": "COLE_AQUI_O_PIX_COPIA_E_COLA"
+      }
+    },
+    "book": {
+      "width": 420,
+      "height": 640,
+      "minWidth": 260,
+      "maxWidth": 420,
+      "minHeight": 390,
+      "maxHeight": 640,
+      "showCover": false,
+      "usePortrait": true,
+      "size": "stretch",
+      "maxShadowOpacity": 0.22,
+      "mobileScrollSupport": true,
+      "clickEventForward": true,
+      "disableFlipByClick": false
+    },
+    "pages": []
+  }
+  $json$::jsonb
+)
+on conflict (slug) do update
+set
+  is_published = excluded.is_published,
+  config = excluded.config;

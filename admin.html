@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin | Convite Digital</title>
+    <meta
+      name="description"
+      content="Painel administrativo simples para cadastro de convites."
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link rel="stylesheet" href="assets/css/admin.css" />
+    <script src="assets/js/supabase-public.js"></script>
+    <script src="assets/js/config.js"></script>
+    <script defer src="assets/js/admin.js"></script>
+  </head>
+  <body class="site-body admin-body">
+    <main class="admin-shell">
+      <section class="admin-grid">
+        <aside class="glass-panel admin-sidebar">
+          <p class="page-tag">Operacao</p>
+          <h1 class="admin-title">Painel de convites</h1>
+          <p class="admin-copy">
+            Login simples com Supabase Auth para cadastrar e atualizar casais sem
+            abrir o banco manualmente.
+          </p>
+          <ul class="admin-list">
+            <li>Carrega convite por slug</li>
+            <li>Salva rascunho ou publica</li>
+            <li>Gera SQL de backup para colar no editor</li>
+          </ul>
+          <div class="admin-note">
+            <strong>Primeiro acesso:</strong> crie um usuario em
+            <code>Supabase Auth</code> e use esse e-mail e senha aqui.
+          </div>
+        </aside>
+
+        <section class="glass-panel admin-panel">
+          <div id="authCard" class="auth-card">
+            <div class="content-stack-md">
+              <p class="page-tag">Login</p>
+              <h2 class="page-title admin-section-title">Entrar no admin</h2>
+              <p class="page-description">
+                Use um usuario autenticado do Supabase para editar convites.
+              </p>
+            </div>
+
+            <form id="loginForm" class="admin-form">
+              <label class="admin-field">
+                <span>E-mail</span>
+                <input id="emailInput" type="email" autocomplete="email" required />
+              </label>
+              <label class="admin-field">
+                <span>Senha</span>
+                <input
+                  id="passwordInput"
+                  type="password"
+                  autocomplete="current-password"
+                  required
+                />
+              </label>
+              <button type="submit" class="page-action admin-primary-button">
+                Entrar
+              </button>
+            </form>
+          </div>
+
+          <div id="workspace" class="workspace hidden">
+            <div class="admin-toolbar">
+              <div>
+                <p class="page-tag">Editor</p>
+                <h2 class="page-title admin-section-title">Cadastro rapido</h2>
+              </div>
+              <button id="logoutButton" type="button" class="page-action">
+                Sair
+              </button>
+            </div>
+
+            <form id="invitationForm" class="admin-form">
+              <div class="admin-inline-fields">
+                <label class="admin-field">
+                  <span>Slug</span>
+                  <input id="slugInput" type="text" placeholder="camila-eduardo" required />
+                </label>
+                <label class="admin-field admin-checkbox-field">
+                  <span>Publicado</span>
+                  <input id="publishedInput" type="checkbox" checked />
+                </label>
+              </div>
+
+              <div class="admin-actions">
+                <button id="loadButton" type="button" class="page-action">
+                  Carregar por slug
+                </button>
+                <button id="fillTemplateButton" type="button" class="page-action">
+                  Usar template
+                </button>
+                <button type="submit" class="page-action admin-primary-button">
+                  Salvar convite
+                </button>
+              </div>
+
+              <label class="admin-field">
+                <span>Config JSON</span>
+                <textarea id="configInput" rows="22" spellcheck="false"></textarea>
+              </label>
+            </form>
+
+            <div class="admin-preview-card">
+              <div class="admin-preview-header">
+                <h3 class="admin-subtitle">Acoes rapidas</h3>
+                <a
+                  id="previewLink"
+                  class="page-action"
+                  href="/?casal=camila-eduardo"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Abrir preview
+                </a>
+              </div>
+              <label class="admin-field">
+                <span>SQL gerado</span>
+                <textarea id="sqlOutput" rows="12" readonly spellcheck="false"></textarea>
+              </label>
+              <div class="admin-actions">
+                <button id="generateSqlButton" type="button" class="page-action">
+                  Gerar SQL
+                </button>
+                <button id="copySqlButton" type="button" class="page-action">
+                  Copiar SQL
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div
+      id="toast"
+      class="toast toast-base glass-panel"
+      role="status"
+      aria-live="polite"
+    >
+      Acao realizada.
+    </div>
+  </body>
+</html>

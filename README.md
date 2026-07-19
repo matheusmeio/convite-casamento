@@ -31,6 +31,37 @@ Por que esta decisao:
    - `config`
 4. Envie o link final no formato `https://seu-dominio.com/?casal=slug-do-casal`.
 
+## Painel Admin
+
+Rota local/publicada:
+
+- `admin.html`
+
+Fluxo:
+
+1. crie um usuario de admin em `Supabase Auth`
+2. acesse `/admin.html`
+3. faca login com e-mail e senha
+4. informe o `slug`
+5. carregue um convite existente ou use o template
+6. edite o JSON
+7. salve pelo proprio painel
+
+O admin usa:
+
+- leitura e escrita por usuario autenticado (`authenticated`)
+- leitura publica apenas para convites publicados (`anon`)
+- geracao de SQL de backup no proprio painel
+
+Arquivos do admin:
+
+- `admin.html`
+- `assets/css/admin.css`
+- `assets/js/admin.js`
+- `assets/js/supabase-public.js`
+- `assets/templates/invitation-template.json`
+- `assets/templates/upsert-invitation-template.sql`
+
 ## Seed De Demonstracao
 
 - seed preservado existente: `julia-renan`
@@ -74,6 +105,18 @@ Depois do deploy, teste:
 - `/`
 - `/?casal=camila-eduardo`
 - `/?casal=julia-renan`
+- `/admin.html`
+
+## Auditoria De Producao
+
+Se o deploy abrir uma tela de login da Vercel em vez do convite, o problema nao esta no frontend.
+
+Nesse caso, revise no painel da Vercel:
+
+- deployment protection
+- preview protection
+- password protection do projeto
+- visibilidade do ambiente publicado
 
 ## Pendencia Intencional
 
