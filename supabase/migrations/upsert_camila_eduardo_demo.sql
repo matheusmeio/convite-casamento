@@ -1,0 +1,165 @@
+insert into public.invitations (slug, is_published, config)
+values (
+  'camila-eduardo',
+  true,
+  $json$
+  {
+    "meta": {
+      "pageTitle": "Camila & Eduardo | Convite de Casamento",
+      "description": "Convite digital de demonstracao com experiencia flipbook e operacao white-label."
+    },
+    "theme": {
+      "background": "#f6efe7",
+      "surface": "#fffaf4",
+      "surfaceStrong": "#f1e6d7",
+      "ink": "#261f1a",
+      "muted": "#6f655d",
+      "accent": "#b18b5e",
+      "accentStrong": "#7d5d37"
+    },
+    "hero": {
+      "overline": "Convite de casamento",
+      "headline": "Uma celebracao contada em paginas",
+      "subheadline": "Um convite demo pronto para apresentar o produto com visual romantico, links reais e assets locais.",
+      "primaryCtaLabel": "Abrir convite",
+      "secondaryCtaLabel": "Ver local"
+    },
+    "couple": {
+      "brideName": "Camila",
+      "groomName": "Eduardo",
+      "displayName": "Camila & Eduardo",
+      "storyHeadline": "27 de setembro de 2027"
+    },
+    "event": {
+      "dateISO": "2027-09-27T16:00:00-03:00",
+      "dateLabel": "27 de setembro de 2027, as 16h00",
+      "ceremonyLabel": "Cerimonia ao ar livre e recepcao",
+      "venueName": "Fazenda Vila Clara",
+      "venueAddress": "Estrada da Serra, 1200 - Itatiba, SP",
+      "mapsUrl": "https://maps.google.com/?q=Fazenda+Vila+Clara+Itatiba+SP"
+    },
+    "audio": {
+      "src": "",
+      "autoplay": false,
+      "loop": true,
+      "label": "Trilha do casal"
+    },
+    "actions": {
+      "rsvpLinks": [
+        {
+          "label": "Confirmar presenca",
+          "url": "https://wa.me/5511999999999?text=Ola%2C+quero+confirmar+presenca+no+casamento+de+Camila+e+Eduardo."
+        }
+      ],
+      "pix": {
+        "label": "Presente via PIX",
+        "beneficiary": "Camila e Eduardo",
+        "key": "presentes@camilaeeduardo.com.br",
+        "copyPaste": "00020126580014BR.GOV.BCB.PIX0137presentes@camilaeeduardo.com.br5204000053039865406120.005802BR5920CAMILA E EDUARDO6009SAO PAULO62070503***6304ABCD"
+      }
+    },
+    "book": {
+      "width": 420,
+      "height": 640,
+      "minWidth": 260,
+      "maxWidth": 420,
+      "minHeight": 390,
+      "maxHeight": 640,
+      "showCover": false,
+      "usePortrait": true,
+      "size": "stretch",
+      "maxShadowOpacity": 0.22,
+      "mobileScrollSupport": true,
+      "clickEventForward": true,
+      "disableFlipByClick": false
+    },
+    "pages": [
+      {
+        "id": "cover",
+        "type": "image",
+        "density": "soft",
+        "imageSrc": "assets/media/pages/demo-cover.svg",
+        "imageFit": "cover",
+        "alt": "Capa editorial do convite de Camila e Eduardo"
+      },
+      {
+        "id": "welcome",
+        "type": "content",
+        "density": "soft",
+        "eyebrow": "Nosso convite",
+        "title": "Convidamos voce para celebrar o nosso casamento.",
+        "description": [
+          "Depois de anos construindo uma vida leve, escolhemos dizer sim cercados pelas pessoas que mais amamos.",
+          "Deslize ou toque nas bordas para folhear cada pagina deste convite."
+        ],
+        "facts": [
+          {
+            "label": "Quando",
+            "value": "27 de setembro de 2027, as 16h00"
+          },
+          {
+            "label": "Onde",
+            "value": "Fazenda Vila Clara"
+          }
+        ],
+        "quote": "Esperamos voce para viver conosco um fim de tarde inesquecivel."
+      },
+      {
+        "id": "story",
+        "type": "split",
+        "density": "soft",
+        "imageSrc": "assets/media/pages/demo-garden-scene.svg",
+        "imageFit": "cover",
+        "alt": "Cena romantica em jardim ao entardecer",
+        "eyebrow": "Nossa historia",
+        "title": "Um encontro tranquilo, uma celebracao luminosa e um convite feito para ser vivido pagina por pagina.",
+        "description": [
+          "Escolhemos uma festa ao ar livre, cercada de natureza, boa musica e conversas demoradas ate a noite cair.",
+          "Queremos que este convite ja antecipe a atmosfera do dia: acolhedora, elegante e sem excessos."
+        ],
+        "list": [
+          "Cerimonia e recepcao no mesmo local.",
+          "Dress code leve em tons suaves.",
+          "Uma experiencia pensada para celular e desktop."
+        ]
+      },
+      {
+        "id": "event-details",
+        "type": "content",
+        "density": "soft",
+        "eyebrow": "Informacoes do evento",
+        "title": "Tudo o que voce precisa para esse dia especial.",
+        "description": [
+          "Reservamos esta pagina para reunir data, local, confirmacao de presenca e contagem regressiva sem depender de telas extras."
+        ],
+        "showEvent": true,
+        "showCountdown": true,
+        "showActions": true
+      },
+      {
+        "id": "gift-page",
+        "type": "content",
+        "density": "soft",
+        "eyebrow": "Lista de presentes",
+        "title": "Se desejar nos presentear, deixamos o PIX aqui com carinho.",
+        "description": [
+          "Sua presenca e o nosso maior presente, mas, se quiser contribuir com a nossa nova etapa, voce pode usar o codigo abaixo."
+        ],
+        "showPix": true
+      },
+      {
+        "id": "closing",
+        "type": "image",
+        "density": "soft",
+        "imageSrc": "assets/media/pages/demo-closing.svg",
+        "imageFit": "cover",
+        "alt": "Pagina final do convite de Camila e Eduardo"
+      }
+    ]
+  }
+  $json$::jsonb
+)
+on conflict (slug) do update
+set
+  is_published = excluded.is_published,
+  config = excluded.config;

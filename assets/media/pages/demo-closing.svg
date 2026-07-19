@@ -1,0 +1,23 @@
+<svg width="840" height="1280" viewBox="0 0 840 1280" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="840" height="1280" rx="36" fill="#F7EBDD"/>
+  <rect x="24" y="24" width="792" height="1232" rx="28" fill="url(#paper)" stroke="#D9BE99" stroke-opacity="0.48"/>
+  <path d="M153 269C196 348 234 407 328 449" stroke="#B18B5E" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M687 269C644 348 606 407 512 449" stroke="#B18B5E" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M222 978C268 911 322 873 391 864" stroke="#B18B5E" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M618 978C572 911 518 873 449 864" stroke="#B18B5E" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="185" cy="250" r="11" fill="#C39A6B"/>
+  <circle cx="656" cy="249" r="11" fill="#C39A6B"/>
+  <circle cx="247" cy="961" r="9" fill="#C39A6B"/>
+  <circle cx="593" cy="960" r="9" fill="#C39A6B"/>
+  <text x="420" y="430" text-anchor="middle" fill="#8A6A43" font-family="Arial, sans-serif" font-size="22" letter-spacing="8">ATE BREVE</text>
+  <text x="420" y="586" text-anchor="middle" fill="#392C22" font-family="Georgia, serif" font-size="176" font-weight="600">C</text>
+  <text x="420" y="690" text-anchor="middle" fill="#B18B5E" font-family="Georgia, serif" font-size="78">&amp;</text>
+  <text x="420" y="862" text-anchor="middle" fill="#392C22" font-family="Georgia, serif" font-size="176" font-weight="600">E</text>
+  <text x="420" y="1000" text-anchor="middle" fill="#6F655D" font-family="Arial, sans-serif" font-size="24">Esperamos voce para celebrar conosco</text>
+  <defs>
+    <linearGradient id="paper" x1="420" y1="24" x2="420" y2="1256" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF8F0"/>
+      <stop offset="1" stop-color="#F0DDC7"/>
+    </linearGradient>
+  </defs>
+</svg>

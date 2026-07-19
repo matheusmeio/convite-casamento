@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Convite Flipbook White-label</title>
+    <meta
+      name="description"
+      content="Template base de convite de casamento com efeito flipbook."
+    />
+    <link
+      rel="stylesheet"
+      href="assets/vendor/page-flip/stPageFlip.min.css"
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <script src="assets/js/config.js"></script>
+    <script defer src="assets/vendor/page-flip/page-flip.browser.min.js"></script>
+    <script defer src="assets/js/script.js"></script>
+  </head>
+  <body class="site-body">
+    <button
+      id="audioToggle"
+      type="button"
+      class="glass-panel floating-audio hidden"
+      aria-pressed="false"
+    >
+      Tocar musica
+    </button>
+
+    <main class="page-shell">
+      <section class="page-center">
+        <div
+          id="invitationExperience"
+          class="experience-frame"
+        >
+          <div
+            id="flipbookStage"
+            class="flipbook-stage single-page-stage stage-frame"
+          >
+            <div id="flipbook" class="single-page-book"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div
+      id="toast"
+      class="toast toast-base glass-panel"
+      role="status"
+      aria-live="polite"
+    >
+      Codigo copiado com sucesso.
+    </div>
+  </body>
+</html>

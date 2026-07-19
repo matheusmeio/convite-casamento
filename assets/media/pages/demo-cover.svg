@@ -1,0 +1,29 @@
+<svg width="840" height="1280" viewBox="0 0 840 1280" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="840" height="1280" rx="36" fill="#F8EEE4"/>
+  <rect x="24" y="24" width="792" height="1232" rx="28" fill="url(#paper)" stroke="rgba(177,139,94,0.22)"/>
+  <path d="M164 197C200 145 257 110 323 110C384 110 437 140 472 186C505 149 556 126 613 126C707 126 782 203 782 298C782 330 774 359 760 384C726 444 676 495 623 536C542 599 458 650 421 678C383 650 299 599 219 536C167 495 115 444 80 384C66 359 58 330 58 298C58 203 133 126 227 126C289 126 343 159 376 210" fill="#E8D5C1" opacity="0.42"/>
+  <g opacity="0.82">
+    <path d="M117 952C157 868 223 819 288 819C363 819 418 887 446 952" stroke="#B18B5E" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M723 971C693 907 640 873 589 873C524 873 479 925 456 971" stroke="#B18B5E" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M147 286C180 325 210 390 216 461" stroke="#B18B5E" stroke-width="2" stroke-linecap="round"/>
+    <path d="M689 276C663 311 636 369 630 432" stroke="#B18B5E" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <g fill="#7D5D37" opacity="0.78">
+    <circle cx="177" cy="271" r="8"/>
+    <circle cx="648" cy="267" r="9"/>
+    <circle cx="694" cy="942" r="10"/>
+    <circle cx="153" cy="929" r="7"/>
+  </g>
+  <text x="420" y="398" text-anchor="middle" fill="#8A6A43" font-family="Arial, sans-serif" font-size="24" letter-spacing="8">CONVITE DE CASAMENTO</text>
+  <text x="420" y="535" text-anchor="middle" fill="#3B2E24" font-family="Georgia, serif" font-size="108" font-weight="600">Camila</text>
+  <text x="420" y="626" text-anchor="middle" fill="#B18B5E" font-family="Georgia, serif" font-size="74">&amp;</text>
+  <text x="420" y="726" text-anchor="middle" fill="#3B2E24" font-family="Georgia, serif" font-size="108" font-weight="600">Eduardo</text>
+  <text x="420" y="834" text-anchor="middle" fill="#8A6A43" font-family="Arial, sans-serif" font-size="24" letter-spacing="6">27 DE SETEMBRO DE 2027</text>
+  <text x="420" y="884" text-anchor="middle" fill="#6F655D" font-family="Arial, sans-serif" font-size="22">Fazenda Vila Clara . Itatiba . Sao Paulo</text>
+  <defs>
+    <linearGradient id="paper" x1="420" y1="24" x2="420" y2="1256" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF9F2"/>
+      <stop offset="1" stop-color="#F2E4D4"/>
+    </linearGradient>
+  </defs>
+</svg>
