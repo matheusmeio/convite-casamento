@@ -42,6 +42,20 @@ function initializeInvitation() {
   initCountdown();
   initAudio();
   bindEvents();
+
+  // #region debug-point A:initial-render
+  window.setTimeout(() => {
+    const firstPage = ui.flipbook?.querySelector(".invitation-page");
+    const monogram = ui.flipbook?.querySelector(".timeless-monogram");
+    const firstLetter = ui.flipbook?.querySelector(".timeless-monogram-letter--first");
+    const secondLetter = ui.flipbook?.querySelector(".timeless-monogram-letter--second");
+    const pageStyle = firstPage ? window.getComputedStyle(firstPage) : null;
+    const monogramRect = monogram?.getBoundingClientRect?.();
+    const firstRect = firstLetter?.getBoundingClientRect?.();
+    const secondRect = secondLetter?.getBoundingClientRect?.();
+    fetch("http://127.0.0.1:7777/event",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:"page-flip-bleed",runId:"pre-fix",hypothesisId:"A",location:"script.js:initializeInvitation",msg:"[DEBUG] initial invitation render snapshot",data:{pageBg:pageStyle?.backgroundColor,pageOverflow:pageStyle?.overflow,pageBackface:pageStyle?.backfaceVisibility,monogramWidth:monogramRect?.width,monogramHeight:monogramRect?.height,firstLeft:firstRect?.left,firstRight:firstRect?.right,secondLeft:secondRect?.left,secondRight:secondRect?.right},ts:Date.now()})}).catch(()=>{});
+  }, 250);
+  // #endregion
 }
 
 async function loadWeddingConfig() {
@@ -710,6 +724,18 @@ function initFlipbook() {
   }
 
   loadPages(pageElements);
+
+  // #region debug-point B:flipbook-init
+  fetch("http://127.0.0.1:7777/event",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:"page-flip-bleed",runId:"pre-fix",hypothesisId:"B",location:"script.js:initFlipbook",msg:"[DEBUG] flipbook initialized",data:{pageCount:pageElements.length,bookWidth:frameWidth,bookHeight:frameHeight,hasPageFlip:Boolean(state.pageFlip),wrapperCount:ui.flipbook?.querySelectorAll('[class*=\"stf__item\"],[class*=\"stf__page\"],[class*=\"stf__block\"]').length || 0},ts:Date.now()})}).catch(()=>{});
+  // #endregion
+
+  // #region debug-point C:flip-event
+  state.pageFlip.on?.("flip", () => {
+    const livePage = ui.flipbook?.querySelector(".invitation-page");
+    const liveStyle = livePage ? window.getComputedStyle(livePage) : null;
+    fetch("http://127.0.0.1:7777/event",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:"page-flip-bleed",runId:"pre-fix",hypothesisId:"C",location:"script.js:initFlipbook:flip",msg:"[DEBUG] flip event snapshot",data:{currentPage:state.pageFlip?.getCurrentPageIndex?.(),pageBg:liveStyle?.backgroundColor,pageBackface:liveStyle?.backfaceVisibility,itemCount:ui.flipbook?.querySelectorAll('.stf__item').length || 0},ts:Date.now()})}).catch(()=>{});
+  });
+  // #endregion
 }
 
 function initCountdown() {
