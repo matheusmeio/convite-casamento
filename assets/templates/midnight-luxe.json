@@ -1,0 +1,156 @@
+{
+  "meta": {
+    "pageTitle": "Camila & Eduardo | Convite de Casamento",
+    "description": "Convite digital com atmosfera noturna, dramatica e luxuosa.",
+    "templateName": "midnight-luxe"
+  },
+  "theme": {
+    "templateId": "midnight-luxe",
+    "background": "#101615",
+    "surface": "#17201d",
+    "surfaceStrong": "#20302a",
+    "ink": "#f4efe8",
+    "muted": "#c8beb1",
+    "accent": "#d6b06f",
+    "accentStrong": "#f1d8a6"
+  },
+  "hero": {
+    "overline": "Convite de luxo",
+    "headline": "Uma noite elegante para celebrar o nosso sim",
+    "subheadline": "Template dramatico com fundo escuro, luz dourada e composicao mais cenografica.",
+    "primaryCtaLabel": "Abrir convite",
+    "secondaryCtaLabel": "Ver local"
+  },
+  "couple": {
+    "brideName": "Camila",
+    "groomName": "Eduardo",
+    "displayName": "Camila & Eduardo",
+    "storyHeadline": "27 de setembro de 2027"
+  },
+  "event": {
+    "dateISO": "2027-09-27T16:00:00-03:00",
+    "dateLabel": "27 de setembro de 2027, as 16h00",
+    "ceremonyLabel": "Cerimonia ao ar livre e recepcao",
+    "venueName": "Fazenda Vila Clara",
+    "venueAddress": "Estrada da Serra, 1200 - Itatiba, SP",
+    "mapsUrl": "https://maps.google.com/?q=Fazenda+Vila+Clara+Itatiba+SP"
+  },
+  "audio": {
+    "src": "",
+    "autoplay": false,
+    "loop": true,
+    "label": "Trilha do casal"
+  },
+  "actions": {
+    "rsvpLinks": [
+      {
+        "label": "Confirmar presenca",
+        "url": "https://wa.me/5511999999999?text=Ola%2C+quero+confirmar+presenca+no+casamento+de+Camila+e+Eduardo."
+      }
+    ],
+    "pix": {
+      "label": "Presente via PIX",
+      "beneficiary": "Camila e Eduardo",
+      "key": "presentes@camilaeeduardo.com.br",
+      "copyPaste": "00020126580014BR.GOV.BCB.PIX0137presentes@camilaeeduardo.com.br5204000053039865406120.005802BR5920CAMILA E EDUARDO6009SAO PAULO62070503***6304ABCD"
+    }
+  },
+  "book": {
+    "width": 420,
+    "height": 640,
+    "minWidth": 260,
+    "maxWidth": 420,
+    "minHeight": 390,
+    "maxHeight": 640,
+    "showCover": false,
+    "usePortrait": true,
+    "size": "stretch",
+    "maxShadowOpacity": 0.3,
+    "mobileScrollSupport": true,
+    "clickEventForward": true,
+    "disableFlipByClick": false
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "type": "image",
+      "density": "soft",
+      "imageSrc": "assets/media/pages/demo-cover.svg",
+      "imageFit": "cover",
+      "alt": "Capa editorial do convite"
+    },
+    {
+      "id": "welcome",
+      "type": "content",
+      "density": "soft",
+      "eyebrow": "Nosso convite",
+      "title": "Um convite cenografico para uma noite intensa e luminosa.",
+      "description": [
+        "Este template foi pensado para casais que querem um impacto mais dramatico, com contraste, brilho e profundidade.",
+        "Mesmo com a atmosfera noturna, a leitura continua clara em telas pequenas."
+      ],
+      "facts": [
+        {
+          "label": "Quando",
+          "value": "27 de setembro de 2027, as 16h00"
+        },
+        {
+          "label": "Onde",
+          "value": "Fazenda Vila Clara"
+        }
+      ],
+      "quote": "Mais contraste, mais presenca e um clima de celebracao memoravel."
+    },
+    {
+      "id": "story",
+      "type": "split",
+      "density": "soft",
+      "imageSrc": "assets/media/pages/demo-garden-scene.svg",
+      "imageFit": "cover",
+      "alt": "Cena romantica em jardim ao entardecer",
+      "eyebrow": "Clima da noite",
+      "title": "Luz baixa, dourado sutil e uma experiencia visual mais cinematografica.",
+      "description": [
+        "Ideal para casamentos com recepcao noturna, velas, pista de danca e um clima de gala mais contemporaneo.",
+        "Os blocos ganham mais contraste e profundidade sem comprometer a navegacao."
+      ],
+      "list": [
+        "Base escura com dourado.",
+        "Elementos mais dramaticos e sofisticados.",
+        "Leitura ajustada para mobile."
+      ]
+    },
+    {
+      "id": "event-details",
+      "type": "content",
+      "density": "soft",
+      "eyebrow": "Evento",
+      "title": "Tudo o que voce precisa para chegar no horario e curtir a noite.",
+      "description": [
+        "Aqui ficam local, contagem regressiva e links de acao com visual mais luxuoso e contraste elevado."
+      ],
+      "showEvent": true,
+      "showCountdown": true,
+      "showActions": true
+    },
+    {
+      "id": "gift-page",
+      "type": "content",
+      "density": "soft",
+      "eyebrow": "Presentes",
+      "title": "Se desejar nos presentear, deixamos uma opcao pratica e elegante.",
+      "description": [
+        "O bloco de presentes segue o mesmo clima sofisticado do restante do convite."
+      ],
+      "showPix": true
+    },
+    {
+      "id": "closing",
+      "type": "image",
+      "density": "soft",
+      "imageSrc": "assets/media/pages/demo-closing.svg",
+      "imageFit": "cover",
+      "alt": "Pagina final do convite"
+    }
+  ]
+}

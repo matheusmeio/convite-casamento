@@ -1,0 +1,156 @@
+{
+  "meta": {
+    "pageTitle": "Camila & Eduardo | Convite de Casamento",
+    "description": "Convite digital com visual editorial moderno.",
+    "templateName": "editorial-modern"
+  },
+  "theme": {
+    "templateId": "editorial-modern",
+    "background": "#ede8df",
+    "surface": "#f7f3ee",
+    "surfaceStrong": "#e3ddd4",
+    "ink": "#1f1a17",
+    "muted": "#706861",
+    "accent": "#8f7f6d",
+    "accentStrong": "#2a2420"
+  },
+  "hero": {
+    "overline": "Convite editorial",
+    "headline": "Design limpo para uma celebracao memoravel",
+    "subheadline": "Template minimalista com contraste elegante e estrutura de revista.",
+    "primaryCtaLabel": "Abrir convite",
+    "secondaryCtaLabel": "Ver local"
+  },
+  "couple": {
+    "brideName": "Camila",
+    "groomName": "Eduardo",
+    "displayName": "Camila & Eduardo",
+    "storyHeadline": "27 de setembro de 2027"
+  },
+  "event": {
+    "dateISO": "2027-09-27T16:00:00-03:00",
+    "dateLabel": "27 de setembro de 2027, as 16h00",
+    "ceremonyLabel": "Cerimonia ao ar livre e recepcao",
+    "venueName": "Fazenda Vila Clara",
+    "venueAddress": "Estrada da Serra, 1200 - Itatiba, SP",
+    "mapsUrl": "https://maps.google.com/?q=Fazenda+Vila+Clara+Itatiba+SP"
+  },
+  "audio": {
+    "src": "",
+    "autoplay": false,
+    "loop": true,
+    "label": "Trilha do casal"
+  },
+  "actions": {
+    "rsvpLinks": [
+      {
+        "label": "Confirmar presenca",
+        "url": "https://wa.me/5511999999999?text=Ola%2C+quero+confirmar+presenca+no+casamento+de+Camila+e+Eduardo."
+      }
+    ],
+    "pix": {
+      "label": "Presente via PIX",
+      "beneficiary": "Camila e Eduardo",
+      "key": "presentes@camilaeeduardo.com.br",
+      "copyPaste": "00020126580014BR.GOV.BCB.PIX0137presentes@camilaeeduardo.com.br5204000053039865406120.005802BR5920CAMILA E EDUARDO6009SAO PAULO62070503***6304ABCD"
+    }
+  },
+  "book": {
+    "width": 420,
+    "height": 640,
+    "minWidth": 260,
+    "maxWidth": 420,
+    "minHeight": 390,
+    "maxHeight": 640,
+    "showCover": false,
+    "usePortrait": true,
+    "size": "stretch",
+    "maxShadowOpacity": 0.12,
+    "mobileScrollSupport": true,
+    "clickEventForward": true,
+    "disableFlipByClick": false
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "type": "image",
+      "density": "soft",
+      "imageSrc": "assets/media/pages/demo-cover.svg",
+      "imageFit": "cover",
+      "alt": "Capa editorial do convite"
+    },
+    {
+      "id": "welcome",
+      "type": "content",
+      "density": "soft",
+      "eyebrow": "O nosso convite",
+      "title": "Uma celebracao pensada com calma, beleza e presenca.",
+      "description": [
+        "Queremos um dia leve, elegante e intimista, com tempo para encontros longos e conversas boas.",
+        "Aqui voce encontra tudo o que precisa para acompanhar o convite sem telas extras."
+      ],
+      "facts": [
+        {
+          "label": "Data",
+          "value": "27 de setembro de 2027"
+        },
+        {
+          "label": "Cidade",
+          "value": "Itatiba, SP"
+        }
+      ],
+      "quote": "Uma estetica limpa para um sim cheio de significado."
+    },
+    {
+      "id": "story",
+      "type": "split",
+      "density": "soft",
+      "imageSrc": "assets/media/pages/demo-garden-scene.svg",
+      "imageFit": "cover",
+      "alt": "Cena romantica em jardim ao entardecer",
+      "eyebrow": "Atmosfera",
+      "title": "Um convite editorial para um casamento contemporaneo, sereno e inesquecivel.",
+      "description": [
+        "Esse template funciona bem para casais que querem um visual mais sofisticado e menos ornamental.",
+        "A composicao privilegia ritmo, tipografia e respiro visual."
+      ],
+      "list": [
+        "Leitura clara em celular.",
+        "Contraste elegante entre texto e superficie.",
+        "Layout com cara de revista premium."
+      ]
+    },
+    {
+      "id": "event-details",
+      "type": "content",
+      "density": "soft",
+      "eyebrow": "Evento",
+      "title": "Informacoes organizadas com clareza.",
+      "description": [
+        "Use esta pagina para concentrar local, confirmacao, horario e a contagem regressiva de forma mais objetiva."
+      ],
+      "showEvent": true,
+      "showCountdown": true,
+      "showActions": true
+    },
+    {
+      "id": "gift-page",
+      "type": "content",
+      "density": "soft",
+      "eyebrow": "Presentes",
+      "title": "Se desejar, deixamos uma opcao via PIX com toda delicadeza.",
+      "description": [
+        "A presenca ja e suficiente, mas o template tambem comporta contribuicoes de forma discreta e organizada."
+      ],
+      "showPix": true
+    },
+    {
+      "id": "closing",
+      "type": "image",
+      "density": "soft",
+      "imageSrc": "assets/media/pages/demo-closing.svg",
+      "imageFit": "cover",
+      "alt": "Pagina final do convite"
+    }
+  ]
+}

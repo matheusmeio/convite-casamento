@@ -1,9 +1,11 @@
 {
   "meta": {
     "pageTitle": "Nome 1 & Nome 2 | Convite de Casamento",
-    "description": "Convite digital de casamento com experiencia flipbook."
+    "description": "Convite digital de casamento com experiencia flipbook.",
+    "templateName": "classic-botanical"
   },
   "theme": {
+    "templateId": "classic-botanical",
     "background": "#f6efe7",
     "surface": "#fffaf4",
     "surfaceStrong": "#f1e6d7",

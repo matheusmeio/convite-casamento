@@ -2,9 +2,11 @@ window.defaultWeddingConfig = {
   meta: {
     pageTitle: "Camila & Eduardo | Convite de Casamento",
     description:
-      "Convite digital de demonstracao com experiencia flipbook e operacao white-label."
+      "Convite digital de demonstracao com experiencia flipbook e operacao white-label.",
+    templateName: "classic-botanical"
   },
   theme: {
+    templateId: "classic-botanical",
     background: "#f6efe7",
     surface: "#fffaf4",
     surfaceStrong: "#f1e6d7",

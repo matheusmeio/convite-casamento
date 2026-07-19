@@ -1,5 +1,10 @@
 const STORAGE_KEY = "convite_admin_session";
 const DEFAULT_SLUG = "camila-eduardo";
+const TEMPLATE_CATALOG = window.invitationTemplateCatalog || [];
+const DEFAULT_TEMPLATE_ID =
+  window.defaultInvitationTemplateId ||
+  TEMPLATE_CATALOG[0]?.id ||
+  "classic-botanical";
 const SUPABASE_CONFIG = window.publicSupabaseConfig;
 
 const state = {
@@ -17,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function initializeAdmin() {
   cacheElements();
+  populateTemplateSelect();
   bindEvents();
   loadPersistedSession();
   await fillConfigWithTemplate();
@@ -33,6 +39,7 @@ function cacheElements() {
     "emailInput",
     "passwordInput",
     "slugInput",
+    "templateSelect",
     "publishedInput",
     "configInput",
     "sqlOutput",
@@ -67,6 +74,7 @@ function bindEvents() {
     refreshSqlOutput();
     showToast("SQL gerado.");
   });
+  ui.templateSelect?.addEventListener("change", handleTemplateSelectionChange);
   ui.copySqlButton?.addEventListener("click", handleCopySql);
   ui.logoutButton?.addEventListener("click", handleLogout);
   ui.slugInput?.addEventListener("input", () => {
@@ -96,6 +104,15 @@ function renderAuthState() {
 
   ui.authCard.classList.toggle("hidden", isAuthenticated);
   ui.workspace.classList.toggle("hidden", !isAuthenticated);
+}
+
+function populateTemplateSelect() {
+  ui.templateSelect.innerHTML = TEMPLATE_CATALOG.map(
+    (template) =>
+      `<option value="${escapeHtml(template.id)}">${escapeHtml(template.name)}</option>`
+  ).join("");
+
+  ui.templateSelect.value = DEFAULT_TEMPLATE_ID;
 }
 
 async function handleLoginSubmit(event) {
@@ -170,6 +187,7 @@ async function handleLoadInvitation() {
     }
 
     ui.publishedInput.checked = Boolean(record.is_published);
+    ui.templateSelect.value = getTemplateIdFromConfig(record.config);
     ui.configInput.value = JSON.stringify(record.config, null, 2);
     refreshPreviewLink();
     refreshSqlOutput();
@@ -205,6 +223,15 @@ async function handleSaveSubmit(event) {
   }
 
   try {
+    parsedConfig.theme = {
+      ...(parsedConfig.theme || {}),
+      templateId: getSelectedTemplateId()
+    };
+    parsedConfig.meta = {
+      ...(parsedConfig.meta || {}),
+      templateName: getSelectedTemplateId()
+    };
+
     const url = new URL(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}`);
     url.searchParams.set("on_conflict", "slug");
 
@@ -256,16 +283,59 @@ function handleLogout() {
 
 async function fillConfigWithTemplate() {
   try {
-    const response = await fetch("assets/templates/invitation-template.json");
-
-    if (!response.ok) {
-      throw new Error("Template nao encontrado.");
-    }
-
-    const template = await response.json();
+    const template = await loadTemplateConfig(getSelectedTemplateId());
     ui.configInput.value = JSON.stringify(template, null, 2);
   } catch (error) {
-    ui.configInput.value = JSON.stringify(window.defaultWeddingConfig, null, 2);
+    const fallbackConfig = {
+      ...window.defaultWeddingConfig,
+      theme: {
+        ...(window.defaultWeddingConfig.theme || {}),
+        templateId: getSelectedTemplateId()
+      }
+    };
+    ui.configInput.value = JSON.stringify(fallbackConfig, null, 2);
+  }
+}
+
+async function loadTemplateConfig(templateId) {
+  const response = await fetch(`assets/templates/${templateId}.json`);
+
+  if (!response.ok) {
+    throw new Error("Template nao encontrado.");
+  }
+
+  return response.json();
+}
+
+async function handleTemplateSelectionChange() {
+  const currentConfig = parseEditorConfig();
+
+  if (!currentConfig) {
+    refreshSqlOutput();
+    return;
+  }
+
+  try {
+    const templateConfig = await loadTemplateConfig(getSelectedTemplateId());
+    const mergedConfig = {
+      ...currentConfig,
+      meta: {
+        ...(currentConfig.meta || {}),
+        templateName: getSelectedTemplateId()
+      },
+      theme: {
+        ...(currentConfig.theme || {}),
+        ...(templateConfig.theme || {}),
+        templateId: getSelectedTemplateId()
+      }
+    };
+
+    ui.configInput.value = JSON.stringify(mergedConfig, null, 2);
+    refreshSqlOutput();
+    showToast("Template visual atualizado.");
+  } catch (error) {
+    console.error(error);
+    showToast("Nao foi possivel atualizar o template.");
   }
 }
 
@@ -280,6 +350,25 @@ function refreshSqlOutput() {
     ui.publishedInput.checked,
     ui.configInput.value
   );
+}
+
+function parseEditorConfig() {
+  try {
+    return JSON.parse(ui.configInput.value);
+  } catch (error) {
+    return null;
+  }
+}
+
+function getSelectedTemplateId() {
+  return ui.templateSelect?.value || DEFAULT_TEMPLATE_ID;
+}
+
+function getTemplateIdFromConfig(config) {
+  const templateId = config?.theme?.templateId || config?.meta?.templateName;
+  return TEMPLATE_CATALOG.some((template) => template.id === templateId)
+    ? templateId
+    : DEFAULT_TEMPLATE_ID;
 }
 
 function buildUpsertSql(slug, isPublished, configText) {
@@ -345,4 +434,18 @@ function showToast(message) {
   state.toastTimer = window.setTimeout(() => {
     ui.toast.classList.remove("is-visible");
   }, 2200);
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (character) => {
+    const replacements = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    };
+
+    return replacements[character];
+  });
 }

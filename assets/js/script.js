@@ -1,4 +1,9 @@
 const SUPABASE_CONFIG = window.publicSupabaseConfig;
+const TEMPLATE_CATALOG = window.invitationTemplateCatalog || [];
+const DEFAULT_TEMPLATE_ID =
+  window.defaultInvitationTemplateId ||
+  TEMPLATE_CATALOG[0]?.id ||
+  "classic-botanical";
 
 const state = {
   pageFlip: null,
@@ -35,6 +40,7 @@ function initializeInvitation() {
 
   applyMeta();
   applyTheme();
+  applyTemplateMode();
   renderPages();
   initFlipbook();
   initCountdown();
@@ -155,6 +161,15 @@ function applyTheme() {
   });
 }
 
+function applyTemplateMode() {
+  const templateId = getActiveTemplateId();
+  document.body.dataset.template = templateId;
+
+  if (ui.invitationExperience) {
+    ui.invitationExperience.dataset.template = templateId;
+  }
+}
+
 function renderPages() {
   const pages = window.weddingConfig.pages || [];
   ui.flipbook.innerHTML = "";
@@ -178,9 +193,11 @@ function createPageElement(page, index, total) {
 
 function createBasePage(page) {
   const element = document.createElement("article");
-  element.className = `invitation-page page--${page.type || "content"}`;
+  const templateId = getActiveTemplateId();
+  element.className = `invitation-page page--${page.type || "content"} template--${templateId}`;
   element.dataset.pageId = page.id || "";
   element.dataset.density = page.density || "soft";
+  element.dataset.template = templateId;
 
   if (page.density) {
     element.setAttribute("data-density", page.density);
@@ -216,7 +233,7 @@ function createContentPage(page, index, total) {
   element.innerHTML = `
     <div class="page-inner">
       <div class="page-copy">
-        <div class="content-stack-lg">
+        <div class="page-copy-main content-stack-lg">
           ${page.eyebrow ? `<p class="page-tag">${escapeHtml(page.eyebrow)}</p>` : ""}
           ${
             page.title
@@ -231,7 +248,7 @@ function createContentPage(page, index, total) {
           ${page.showActions ? renderActionLinks() : ""}
           ${page.showPix ? renderPixBlock() : ""}
         </div>
-        <div class="content-stack-md">
+        <div class="page-copy-meta content-stack-md">
           ${page.quote ? `<blockquote class="page-quote">${escapeHtml(page.quote)}</blockquote>` : ""}
           ${renderPageFooter(index, total)}
         </div>
@@ -254,7 +271,7 @@ function createSplitPage(page, index, total) {
     <div class="page-inner">
       ${imageMarkup}
       <div class="page-copy">
-        <div class="content-stack-lg">
+        <div class="page-copy-main content-stack-lg">
           ${page.eyebrow ? `<p class="page-tag">${escapeHtml(page.eyebrow)}</p>` : ""}
           ${
             page.title
@@ -269,7 +286,7 @@ function createSplitPage(page, index, total) {
           ${page.showActions ? renderActionLinks() : ""}
           ${page.showPix ? renderPixBlock() : ""}
         </div>
-        <div class="content-stack-md">
+        <div class="page-copy-meta content-stack-md">
           ${page.quote ? `<blockquote class="page-quote">${escapeHtml(page.quote)}</blockquote>` : ""}
           ${renderPageFooter(index, total)}
         </div>
@@ -445,6 +462,16 @@ function renderPageFooter(index, total) {
       <span>${String(index + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}</span>
     </div>
   `;
+}
+
+function getActiveTemplateId() {
+  const templateId =
+    window.weddingConfig?.theme?.templateId ||
+    window.weddingConfig?.meta?.templateName;
+
+  return TEMPLATE_CATALOG.some((template) => template.id === templateId)
+    ? templateId
+    : DEFAULT_TEMPLATE_ID;
 }
 
 function initFlipbook() {
