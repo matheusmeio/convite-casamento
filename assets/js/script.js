@@ -342,7 +342,6 @@ function renderTimelessCover(index, total) {
         <p class="timeless-overline">${escapeHtml(hero.overline || "Convidamos voce para o nosso casamento")}</p>
         <h1 class="timeless-names">${renderNamesMarkup()}</h1>
         <div class="timeless-copy">
-          <p>${escapeHtml(hero.subheadline || "Cada pagina foi pensada para dividir com voce a beleza deste dia.")}</p>
         </div>
       </div>
       ${renderPageFooter(index, total)}

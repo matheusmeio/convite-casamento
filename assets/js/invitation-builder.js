@@ -52,8 +52,6 @@ function buildInvitationConfig(formState) {
     hero: {
       overline: "Convidamos voce para o nosso casamento",
       headline: displayName,
-      subheadline:
-        "Cada pagina foi pensada para compartilhar com voce a beleza e a delicadeza desse dia especial.",
       primaryCtaLabel: "Abrir convite",
       secondaryCtaLabel: "Ver local"
     },
