@@ -70,7 +70,8 @@
 .admin-toolbar,
 .admin-preview-header,
 .admin-actions,
-.admin-inline-fields {
+.admin-inline-fields,
+.admin-two-columns {
   display: flex;
   gap: 12px;
 }
@@ -93,6 +94,10 @@
 
 .admin-inline-fields {
   align-items: flex-end;
+}
+
+.admin-two-columns {
+  align-items: flex-start;
 }
 
 .admin-field {
@@ -119,7 +124,7 @@
 
 .admin-field textarea {
   resize: vertical;
-  min-height: 280px;
+  min-height: 120px;
   font-family:
     ui-monospace, SFMono-Regular, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
@@ -161,6 +166,14 @@
   background: rgba(255, 255, 255, 0.45);
 }
 
+#configPreview {
+  min-height: 320px;
+}
+
+#sqlOutput {
+  min-height: 240px;
+}
+
 .admin-subtitle {
   margin: 0;
   font-size: 1rem;
@@ -186,7 +199,8 @@
   .admin-toolbar,
   .admin-preview-header,
   .admin-actions,
-  .admin-inline-fields {
+  .admin-inline-fields,
+  .admin-two-columns {
     flex-direction: column;
     align-items: stretch;
   }

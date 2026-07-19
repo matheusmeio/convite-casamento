@@ -1,11 +1,7 @@
 const STORAGE_KEY = "convite_admin_session";
-const DEFAULT_SLUG = "camila-eduardo";
-const TEMPLATE_CATALOG = window.invitationTemplateCatalog || [];
-const DEFAULT_TEMPLATE_ID =
-  window.defaultInvitationTemplateId ||
-  TEMPLATE_CATALOG[0]?.id ||
-  "classic-botanical";
+const DEFAULT_SLUG = "laura-pedro";
 const SUPABASE_CONFIG = window.publicSupabaseConfig;
+const invitationBuilder = window.invitationTemplateBuilder;
 
 const state = {
   session: null,
@@ -22,12 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function initializeAdmin() {
   cacheElements();
-  populateTemplateSelect();
   bindEvents();
   loadPersistedSession();
-  await fillConfigWithTemplate();
+  fillForm(invitationBuilder.createDefaultFormState());
   renderAuthState();
   refreshPreviewLink();
+  refreshDerivedOutputs();
 }
 
 function cacheElements() {
@@ -39,13 +35,23 @@ function cacheElements() {
     "emailInput",
     "passwordInput",
     "slugInput",
-    "templateSelect",
     "publishedInput",
-    "configInput",
+    "brideNameInput",
+    "groomNameInput",
+    "dateTimeInput",
+    "ceremonyLabelInput",
+    "venueNameInput",
+    "venueAddressInput",
+    "mapsUrlInput",
+    "rsvpUrlInput",
+    "pixKeyInput",
+    "pixCopyPasteInput",
+    "audioSrcInput",
+    "configPreview",
     "sqlOutput",
     "previewLink",
     "loadButton",
-    "fillTemplateButton",
+    "resetButton",
     "generateSqlButton",
     "copySqlButton",
     "logoutButton",
@@ -59,30 +65,35 @@ function bindEvents() {
   ui.loginForm?.addEventListener("submit", handleLoginSubmit);
   ui.invitationForm?.addEventListener("submit", handleSaveSubmit);
   ui.loadButton?.addEventListener("click", handleLoadInvitation);
-  ui.fillTemplateButton?.addEventListener("click", () => {
-    fillConfigWithTemplate()
-      .then(() => {
-        refreshSqlOutput();
-        showToast("Template carregado.");
-      })
-      .catch((error) => {
-        console.error(error);
-        showToast("Nao foi possivel carregar o template.");
-      });
-  });
+  ui.resetButton?.addEventListener("click", handleResetForm);
   ui.generateSqlButton?.addEventListener("click", () => {
-    refreshSqlOutput();
+    refreshDerivedOutputs();
     showToast("SQL gerado.");
   });
-  ui.templateSelect?.addEventListener("change", handleTemplateSelectionChange);
   ui.copySqlButton?.addEventListener("click", handleCopySql);
   ui.logoutButton?.addEventListener("click", handleLogout);
-  ui.slugInput?.addEventListener("input", () => {
-    refreshPreviewLink();
-    refreshSqlOutput();
+
+  [
+    "slugInput",
+    "publishedInput",
+    "brideNameInput",
+    "groomNameInput",
+    "dateTimeInput",
+    "ceremonyLabelInput",
+    "venueNameInput",
+    "venueAddressInput",
+    "mapsUrlInput",
+    "rsvpUrlInput",
+    "pixKeyInput",
+    "pixCopyPasteInput",
+    "audioSrcInput"
+  ].forEach((id) => {
+    const eventName = id === "publishedInput" ? "change" : "input";
+    ui[id]?.addEventListener(eventName, () => {
+      refreshPreviewLink();
+      refreshDerivedOutputs();
+    });
   });
-  ui.configInput?.addEventListener("input", refreshSqlOutput);
-  ui.publishedInput?.addEventListener("change", refreshSqlOutput);
 }
 
 function loadPersistedSession() {
@@ -104,15 +115,6 @@ function renderAuthState() {
 
   ui.authCard.classList.toggle("hidden", isAuthenticated);
   ui.workspace.classList.toggle("hidden", !isAuthenticated);
-}
-
-function populateTemplateSelect() {
-  ui.templateSelect.innerHTML = TEMPLATE_CATALOG.map(
-    (template) =>
-      `<option value="${escapeHtml(template.id)}">${escapeHtml(template.name)}</option>`
-  ).join("");
-
-  ui.templateSelect.value = DEFAULT_TEMPLATE_ID;
 }
 
 async function handleLoginSubmit(event) {
@@ -180,17 +182,17 @@ async function handleLoadInvitation() {
     const [record] = await response.json();
 
     if (!record) {
-      showToast("Slug nao encontrado. Carreguei o template base.");
-      await fillConfigWithTemplate();
-      refreshSqlOutput();
+      const fallbackState = invitationBuilder.createDefaultFormState();
+      fallbackState.slug = slug;
+      fillForm(fallbackState);
+      showToast("Slug nao encontrado. Carreguei o modelo padrao.");
       return;
     }
 
-    ui.publishedInput.checked = Boolean(record.is_published);
-    ui.templateSelect.value = getTemplateIdFromConfig(record.config);
-    ui.configInput.value = JSON.stringify(record.config, null, 2);
-    refreshPreviewLink();
-    refreshSqlOutput();
+    const formState = invitationBuilder.extractInvitationFormState(record.config);
+    formState.slug = record.slug;
+    formState.isPublished = Boolean(record.is_published);
+    fillForm(formState);
     showToast("Convite carregado.");
   } catch (error) {
     console.error(error);
@@ -213,25 +215,9 @@ async function handleSaveSubmit(event) {
     return;
   }
 
-  let parsedConfig;
+  const config = buildCurrentConfig();
 
   try {
-    parsedConfig = JSON.parse(ui.configInput.value);
-  } catch (error) {
-    showToast("O JSON da configuracao esta invalido.");
-    return;
-  }
-
-  try {
-    parsedConfig.theme = {
-      ...(parsedConfig.theme || {}),
-      templateId: getSelectedTemplateId()
-    };
-    parsedConfig.meta = {
-      ...(parsedConfig.meta || {}),
-      templateName: getSelectedTemplateId()
-    };
-
     const url = new URL(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}`);
     url.searchParams.set("on_conflict", "slug");
 
@@ -245,16 +231,16 @@ async function handleSaveSubmit(event) {
       body: JSON.stringify({
         slug,
         is_published: ui.publishedInput.checked,
-        config: parsedConfig
+        config
       })
     });
 
     if (!response.ok) {
-      throw new Error(`Falha ao salvar convite (${response.status}).`);
+      const errorText = await response.text();
+      throw new Error(errorText || `Falha ao salvar convite (${response.status}).`);
     }
 
-    refreshPreviewLink();
-    refreshSqlOutput();
+    refreshDerivedOutputs();
     showToast("Convite salvo com sucesso.");
   } catch (error) {
     console.error(error);
@@ -262,8 +248,16 @@ async function handleSaveSubmit(event) {
   }
 }
 
+function handleResetForm() {
+  const fallbackState = invitationBuilder.createDefaultFormState();
+  fallbackState.slug = getSlugValue() || fallbackState.slug;
+  fallbackState.isPublished = ui.publishedInput.checked;
+  fillForm(fallbackState);
+  showToast("Formulario restaurado.");
+}
+
 async function handleCopySql() {
-  refreshSqlOutput();
+  refreshDerivedOutputs();
 
   try {
     await navigator.clipboard.writeText(ui.sqlOutput.value);
@@ -281,62 +275,44 @@ function handleLogout() {
   showToast("Sessao encerrada.");
 }
 
-async function fillConfigWithTemplate() {
-  try {
-    const template = await loadTemplateConfig(getSelectedTemplateId());
-    ui.configInput.value = JSON.stringify(template, null, 2);
-  } catch (error) {
-    const fallbackConfig = {
-      ...window.defaultWeddingConfig,
-      theme: {
-        ...(window.defaultWeddingConfig.theme || {}),
-        templateId: getSelectedTemplateId()
-      }
-    };
-    ui.configInput.value = JSON.stringify(fallbackConfig, null, 2);
-  }
+function fillForm(formState) {
+  ui.slugInput.value = formState.slug || DEFAULT_SLUG;
+  ui.publishedInput.checked = Boolean(formState.isPublished);
+  ui.brideNameInput.value = formState.brideName || "";
+  ui.groomNameInput.value = formState.groomName || "";
+  ui.dateTimeInput.value = formState.dateTime || "";
+  ui.ceremonyLabelInput.value = formState.ceremonyLabel || "";
+  ui.venueNameInput.value = formState.venueName || "";
+  ui.venueAddressInput.value = formState.venueAddress || "";
+  ui.mapsUrlInput.value = formState.mapsUrl || "";
+  ui.rsvpUrlInput.value = formState.rsvpUrl || "";
+  ui.pixKeyInput.value = formState.pixKey || "";
+  ui.pixCopyPasteInput.value = formState.pixCopyPaste || "";
+  ui.audioSrcInput.value = formState.audioSrc || "";
+  refreshPreviewLink();
+  refreshDerivedOutputs();
 }
 
-async function loadTemplateConfig(templateId) {
-  const response = await fetch(`assets/templates/${templateId}.json`);
-
-  if (!response.ok) {
-    throw new Error("Template nao encontrado.");
-  }
-
-  return response.json();
+function readFormState() {
+  return {
+    slug: getSlugValue() || DEFAULT_SLUG,
+    isPublished: ui.publishedInput.checked,
+    brideName: ui.brideNameInput.value.trim(),
+    groomName: ui.groomNameInput.value.trim(),
+    dateTime: ui.dateTimeInput.value,
+    ceremonyLabel: ui.ceremonyLabelInput.value.trim(),
+    venueName: ui.venueNameInput.value.trim(),
+    venueAddress: ui.venueAddressInput.value.trim(),
+    mapsUrl: ui.mapsUrlInput.value.trim(),
+    rsvpUrl: ui.rsvpUrlInput.value.trim(),
+    pixKey: ui.pixKeyInput.value.trim(),
+    pixCopyPaste: ui.pixCopyPasteInput.value.trim(),
+    audioSrc: ui.audioSrcInput.value.trim()
+  };
 }
 
-async function handleTemplateSelectionChange() {
-  const currentConfig = parseEditorConfig();
-
-  if (!currentConfig) {
-    refreshSqlOutput();
-    return;
-  }
-
-  try {
-    const templateConfig = await loadTemplateConfig(getSelectedTemplateId());
-    const mergedConfig = {
-      ...currentConfig,
-      meta: {
-        ...(currentConfig.meta || {}),
-        templateName: getSelectedTemplateId()
-      },
-      theme: {
-        ...(currentConfig.theme || {}),
-        ...(templateConfig.theme || {}),
-        templateId: getSelectedTemplateId()
-      }
-    };
-
-    ui.configInput.value = JSON.stringify(mergedConfig, null, 2);
-    refreshSqlOutput();
-    showToast("Template visual atualizado.");
-  } catch (error) {
-    console.error(error);
-    showToast("Nao foi possivel atualizar o template.");
-  }
+function buildCurrentConfig() {
+  return invitationBuilder.buildInvitationConfig(readFormState());
 }
 
 function refreshPreviewLink() {
@@ -344,31 +320,16 @@ function refreshPreviewLink() {
   ui.previewLink.href = `/?casal=${encodeURIComponent(slug)}`;
 }
 
-function refreshSqlOutput() {
+function refreshDerivedOutputs() {
+  const config = buildCurrentConfig();
+  const configText = JSON.stringify(config, null, 2);
+
+  ui.configPreview.value = configText;
   ui.sqlOutput.value = buildUpsertSql(
     getSlugValue() || DEFAULT_SLUG,
     ui.publishedInput.checked,
-    ui.configInput.value
+    configText
   );
-}
-
-function parseEditorConfig() {
-  try {
-    return JSON.parse(ui.configInput.value);
-  } catch (error) {
-    return null;
-  }
-}
-
-function getSelectedTemplateId() {
-  return ui.templateSelect?.value || DEFAULT_TEMPLATE_ID;
-}
-
-function getTemplateIdFromConfig(config) {
-  const templateId = config?.theme?.templateId || config?.meta?.templateName;
-  return TEMPLATE_CATALOG.some((template) => template.id === templateId)
-    ? templateId
-    : DEFAULT_TEMPLATE_ID;
 }
 
 function buildUpsertSql(slug, isPublished, configText) {
@@ -434,18 +395,4 @@ function showToast(message) {
   state.toastTimer = window.setTimeout(() => {
     ui.toast.classList.remove("is-visible");
   }, 2200);
-}
-
-function escapeHtml(value) {
-  return String(value ?? "").replace(/[&<>"']/g, (character) => {
-    const replacements = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    };
-
-    return replacements[character];
-  });
 }

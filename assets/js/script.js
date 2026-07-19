@@ -1,9 +1,5 @@
 const SUPABASE_CONFIG = window.publicSupabaseConfig;
-const TEMPLATE_CATALOG = window.invitationTemplateCatalog || [];
-const DEFAULT_TEMPLATE_ID =
-  window.defaultInvitationTemplateId ||
-  TEMPLATE_CATALOG[0]?.id ||
-  "classic-botanical";
+const DEFAULT_TEMPLATE_ID = "timeless-paper";
 
 const state = {
   pageFlip: null,
@@ -171,7 +167,7 @@ function applyTemplateMode() {
 }
 
 function renderPages() {
-  const pages = window.weddingConfig.pages || [];
+  const pages = buildTemplatePages();
   ui.flipbook.innerHTML = "";
 
   pages.forEach((page, index) => {
@@ -180,6 +176,10 @@ function renderPages() {
 }
 
 function createPageElement(page, index, total) {
+  if (page.layout) {
+    return createTimelessPage(page, index, total);
+  }
+
   switch (page.type) {
     case "image":
       return createImagePage(page, index, total);
@@ -227,14 +227,44 @@ function createImagePage(page, index, total) {
   return element;
 }
 
+function buildTemplatePages() {
+  return [
+    { id: "cover", layout: "cover", type: "content" },
+    { id: "save-date", layout: "save-date", type: "content" },
+    { id: "details", layout: "details", type: "content" },
+    { id: "actions", layout: "actions", type: "content" },
+    { id: "closing", layout: "closing", type: "content" }
+  ];
+}
+
+function createTimelessPage(page, index, total) {
+  const element = createBasePage(page);
+  element.classList.add(`layout--${page.layout}`);
+
+  switch (page.layout) {
+    case "cover":
+      element.innerHTML = renderTimelessCover(index, total);
+      break;
+    case "save-date":
+      element.innerHTML = renderTimelessSaveDate(index, total);
+      break;
+    case "details":
+      element.innerHTML = renderTimelessDetails(index, total);
+      break;
+    case "actions":
+      element.innerHTML = renderTimelessActions(index, total);
+      break;
+    case "closing":
+    default:
+      element.innerHTML = renderTimelessClosing(index, total);
+      break;
+  }
+
+  return element;
+}
+
 function createContentPage(page, index, total) {
   const element = createBasePage(page);
-  const templateId = getActiveTemplateId();
-
-  if (templateId === "editorial-modern") {
-    element.innerHTML = renderEditorialContentPage(page, index, total);
-    return element;
-  }
 
   element.innerHTML = `
     <div class="page-inner">
@@ -267,13 +297,6 @@ function createContentPage(page, index, total) {
 
 function createSplitPage(page, index, total) {
   const element = createBasePage(page);
-  const templateId = getActiveTemplateId();
-
-  if (templateId === "editorial-modern") {
-    element.innerHTML = renderEditorialSplitPage(page, index, total);
-    return element;
-  }
-
   const imageMarkup = page.imageSrc
     ? `<div class="page-image"><img src="${escapeHtml(page.imageSrc)}" alt="${escapeHtml(
         page.alt || ""
@@ -310,74 +333,117 @@ function createSplitPage(page, index, total) {
   return element;
 }
 
-function renderEditorialContentPage(page, index, total) {
+function renderTimelessCover(index, total) {
+  const hero = window.weddingConfig.hero || {};
   return `
-    <div class="page-inner editorial-page-shell">
-      <div class="editorial-topline">
-        <span class="editorial-kicker">${escapeHtml(page.eyebrow || window.weddingConfig.couple?.displayName || "Convite")}</span>
-        <span class="editorial-index">${String(index + 1).padStart(2, "0")}</span>
-      </div>
-      <div class="editorial-grid editorial-grid--content">
-        <div class="page-copy page-copy--editorial">
-          <div class="page-copy-main content-stack-lg">
-            ${page.title ? `<h2 class="page-title editorial-title">${escapeHtml(page.title)}</h2>` : ""}
-            ${renderDescriptions(page.description)}
-            ${renderList(page.list)}
-            ${page.quote ? `<blockquote class="page-quote editorial-quote">${escapeHtml(page.quote)}</blockquote>` : ""}
-          </div>
+    <div class="page-inner timeless-page-shell timeless-page-shell--cover">
+      <div class="timeless-page-main timeless-page-main--center">
+        ${renderMonogram()}
+        <p class="timeless-overline">${escapeHtml(hero.overline || "Convidamos voce para o nosso casamento")}</p>
+        <h1 class="timeless-names">${renderNamesMarkup()}</h1>
+        <div class="timeless-copy">
+          <p>${escapeHtml(hero.subheadline || "Cada pagina foi pensada para dividir com voce a beleza deste dia.")}</p>
         </div>
-        <aside class="editorial-sidebar">
-          <div class="editorial-sidebar-block">
-            ${renderFacts(page.facts)}
-            ${page.showEvent ? renderEventBlock() : ""}
-            ${page.showCountdown ? renderCountdownBlock() : ""}
-            ${page.showActions ? renderActionLinks() : ""}
-            ${page.showPix ? renderPixBlock() : ""}
-          </div>
-          ${renderPageFooter(index, total)}
-        </aside>
       </div>
+      ${renderPageFooter(index, total)}
     </div>
   `;
 }
 
-function renderEditorialSplitPage(page, index, total) {
-  const imageMarkup = page.imageSrc
-    ? `<div class="page-image editorial-image"><img src="${escapeHtml(page.imageSrc)}" alt="${escapeHtml(
-        page.alt || ""
-      )}" style="object-fit:${escapeHtml(page.imageFit || "cover")}" /></div>`
-    : "";
+function renderTimelessSaveDate(index, total) {
+  const dateParts = getEventDateParts();
+  return `
+    <div class="page-inner timeless-page-shell timeless-page-shell--save-date">
+      <div class="timeless-page-main timeless-page-main--center">
+        <div class="timeless-save-lockup">
+          <span class="timeless-save-word">SAVE</span>
+          <span class="timeless-save-script">the</span>
+          <span class="timeless-save-word">DATE</span>
+        </div>
+        <p class="timeless-date-feature">${escapeHtml(dateParts.saveDateLine)}</p>
+      </div>
+      ${renderPageFooter(index, total)}
+    </div>
+  `;
+}
+
+function renderTimelessDetails(index, total) {
+  const event = window.weddingConfig.event || {};
+  const dateParts = getEventDateParts();
+  return `
+    <div class="page-inner timeless-page-shell timeless-page-shell--details">
+      <div class="timeless-page-main">
+        ${renderMonogram()}
+        <p class="timeless-blessing">Com a bencao de suas familias</p>
+        <h2 class="timeless-names timeless-names--details">${renderNamesMarkup()}</h2>
+        <div class="timeless-divider"></div>
+        <div class="timeless-details-stack">
+          <p class="timeless-date-block">${escapeHtml(dateParts.numericDate)}</p>
+          <p class="timeless-date-meta">${escapeHtml(dateParts.weekdayTimeLine)}</p>
+          <p class="timeless-location">${escapeHtml(event.venueName || "")}</p>
+          <p class="timeless-location-sub">${escapeHtml(event.venueAddress || "")}</p>
+        </div>
+      </div>
+      ${renderPageFooter(index, total)}
+    </div>
+  `;
+}
+
+function renderTimelessActions(index, total) {
+  const event = window.weddingConfig.event || {};
+  return `
+    <div class="page-inner timeless-page-shell timeless-page-shell--actions">
+      <div class="timeless-page-main">
+        <p class="timeless-overline">Informacoes importantes</p>
+        <h2 class="timeless-title">Toque nos botoes para interagir</h2>
+        <div class="timeless-copy">
+          <p>${escapeHtml(event.ceremonyLabel || "Cerimonia e recepcao")}.</p>
+        </div>
+        ${renderActionLinks()}
+        ${renderPixBlock()}
+      </div>
+      ${renderPageFooter(index, total)}
+    </div>
+  `;
+}
+
+function renderTimelessClosing(index, total) {
+  const event = window.weddingConfig.event || {};
+  const dateParts = getEventDateParts();
+  return `
+    <div class="page-inner timeless-page-shell timeless-page-shell--closing">
+      <div class="timeless-page-main timeless-page-main--center">
+        ${renderMonogram()}
+        <p class="timeless-script-line">Esperamos por voce</p>
+        <div class="timeless-copy timeless-copy--closing">
+          <p>${escapeHtml(dateParts.longDateLine)}</p>
+          <p>${escapeHtml(event.venueName || "")}</p>
+        </div>
+      </div>
+      ${renderPageFooter(index, total)}
+    </div>
+  `;
+}
+
+function renderMonogram() {
+  const brideInitial = (window.weddingConfig.couple?.brideName || "L").trim().charAt(0);
+  const groomInitial = (window.weddingConfig.couple?.groomName || "P").trim().charAt(0);
 
   return `
-    <div class="page-inner editorial-page-shell">
-      <div class="editorial-topline">
-        <span class="editorial-kicker">${escapeHtml(page.eyebrow || "Historia")}</span>
-        <span class="editorial-index">${String(index + 1).padStart(2, "0")}</span>
-      </div>
-      <div class="editorial-grid editorial-grid--split">
-        <div class="editorial-story-column">
-          ${imageMarkup}
-          <div class="page-copy page-copy--editorial">
-            <div class="page-copy-main content-stack-lg">
-              ${page.title ? `<h2 class="page-title editorial-title">${escapeHtml(page.title)}</h2>` : ""}
-              ${renderDescriptions(page.description)}
-            </div>
-          </div>
-        </div>
-        <aside class="editorial-sidebar">
-          <div class="editorial-sidebar-block">
-            ${renderFacts(page.facts)}
-            ${renderList(page.list)}
-            ${page.showEvent ? renderEventBlock() : ""}
-            ${page.showCountdown ? renderCountdownBlock() : ""}
-            ${page.showActions ? renderActionLinks() : ""}
-            ${page.showPix ? renderPixBlock() : ""}
-          </div>
-          ${page.quote ? `<blockquote class="page-quote editorial-quote">${escapeHtml(page.quote)}</blockquote>` : ""}
-          ${renderPageFooter(index, total)}
-        </aside>
-      </div>
+    <div class="timeless-monogram" aria-hidden="true">
+      <span>${escapeHtml(brideInitial)}</span>
+      <span>${escapeHtml(groomInitial)}</span>
     </div>
+  `;
+}
+
+function renderNamesMarkup() {
+  const couple = window.weddingConfig.couple || {};
+
+  return `
+    <span>${escapeHtml(couple.brideName || "")}</span>
+    <small>e</small>
+    <span>${escapeHtml(couple.groomName || "")}</span>
   `;
 }
 
@@ -478,22 +544,25 @@ function renderActionLinks() {
   const event = window.weddingConfig.event || {};
   const rsvpLinks = window.weddingConfig.actions?.rsvpLinks || [];
   const items = [];
+  const mapsUrl = normalizeLinkValue(event.mapsUrl);
 
-  if (event.mapsUrl) {
+  if (mapsUrl) {
     items.push(`
-      <a class="page-action" href="${escapeHtml(event.mapsUrl)}" target="_blank" rel="noreferrer">
+      <a class="page-action" href="${escapeHtml(mapsUrl)}" target="_blank" rel="noreferrer">
         Ver local
       </a>
     `);
   }
 
   rsvpLinks.forEach((link) => {
-    if (!link?.url) {
+    const normalizedUrl = normalizeLinkValue(link?.url);
+
+    if (!normalizedUrl) {
       return;
     }
 
     items.push(`
-      <a class="page-action" href="${escapeHtml(link.url)}" target="_blank" rel="noreferrer">
+      <a class="page-action" href="${escapeHtml(normalizedUrl)}" target="_blank" rel="noreferrer">
         ${escapeHtml(link.label || "Confirmar presenca")}
       </a>
     `);
@@ -548,14 +617,46 @@ function renderPageFooter(index, total) {
   `;
 }
 
-function getActiveTemplateId() {
-  const templateId =
-    window.weddingConfig?.theme?.templateId ||
-    window.weddingConfig?.meta?.templateName;
+function getEventDateParts() {
+  const event = window.weddingConfig.event || {};
+  const date = new Date(event.dateISO || "");
 
-  return TEMPLATE_CATALOG.some((template) => template.id === templateId)
-    ? templateId
-    : DEFAULT_TEMPLATE_ID;
+  if (Number.isNaN(date.getTime())) {
+    return {
+      saveDateLine: "14 . SETEMBRO . 2028",
+      numericDate: "14 | 09 | 2028",
+      weekdayTimeLine: "SEXTA-FEIRA, AS 16H30",
+      longDateLine: event.dateLabel || "14 de setembro de 2028, as 16h30"
+    };
+  }
+
+  const day = new Intl.DateTimeFormat("pt-BR", { day: "2-digit" }).format(date);
+  const monthNumeric = new Intl.DateTimeFormat("pt-BR", { month: "2-digit" }).format(date);
+  const monthWord = new Intl.DateTimeFormat("pt-BR", { month: "long" })
+    .format(date)
+    .toUpperCase();
+  const year = new Intl.DateTimeFormat("pt-BR", { year: "numeric" }).format(date);
+  const weekday = new Intl.DateTimeFormat("pt-BR", { weekday: "long" })
+    .format(date)
+    .toUpperCase();
+  const time = new Intl.DateTimeFormat("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  })
+    .format(date)
+    .replace(":", "H");
+
+  return {
+    saveDateLine: `${day} . ${monthWord} . ${year}`,
+    numericDate: `${day} | ${monthNumeric} | ${year}`,
+    weekdayTimeLine: `${weekday}, AS ${time}`,
+    longDateLine: event.dateLabel || `${day}/${monthNumeric}/${year}`
+  };
+}
+
+function getActiveTemplateId() {
+  return DEFAULT_TEMPLATE_ID;
 }
 
 function initFlipbook() {
@@ -658,14 +759,18 @@ function setCountdownValues(values) {
 
 function initAudio() {
   const audioConfig = window.weddingConfig.audio || {};
+  ui.audioToggle.classList.remove("hidden");
 
   if (!audioConfig.src) {
+    ui.audioToggle.textContent = "Musica";
+    ui.audioToggle.setAttribute("aria-pressed", "false");
+    ui.audioToggle.dataset.audioReady = "false";
     return;
   }
 
-  state.audio = new Audio(audioConfig.src);
+  state.audio = new Audio(normalizeLinkValue(audioConfig.src));
   state.audio.loop = audioConfig.loop !== false;
-  ui.audioToggle.classList.remove("hidden");
+  ui.audioToggle.dataset.audioReady = "true";
   syncAudioButton();
 
   if (audioConfig.autoplay) {
@@ -707,6 +812,11 @@ function bindEvents() {
   });
 
   ui.audioToggle?.addEventListener("click", async () => {
+    if (ui.audioToggle?.dataset.audioReady !== "true") {
+      showToast("A musica sera adicionada em breve.");
+      return;
+    }
+
     if (!state.audio) {
       return;
     }
@@ -770,4 +880,11 @@ function escapeHtml(value) {
 
     return replacements[character];
   });
+}
+
+function normalizeLinkValue(value) {
+  return String(value || "")
+    .trim()
+    .replace(/[`]/g, "")
+    .replace(/\s+/g, "");
 }

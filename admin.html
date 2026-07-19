@@ -8,10 +8,16 @@
       name="description"
       content="Painel administrativo simples para cadastro de convites."
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="assets/css/styles.css" />
     <link rel="stylesheet" href="assets/css/admin.css" />
     <script src="assets/js/supabase-public.js"></script>
-    <script src="assets/js/template-catalog.js"></script>
+    <script src="assets/js/invitation-builder.js"></script>
     <script src="assets/js/config.js"></script>
     <script defer src="assets/js/admin.js"></script>
   </head>
@@ -27,8 +33,8 @@
           </p>
           <ul class="admin-list">
             <li>Carrega convite por slug</li>
-            <li>Salva rascunho ou publica</li>
-            <li>Gera SQL de backup para colar no editor</li>
+            <li>Edita apenas dados essenciais do casal e do evento</li>
+            <li>Salva rascunho ou publica sem mexer em JSON manual</li>
           </ul>
           <div class="admin-note">
             <strong>Primeiro acesso:</strong> crie um usuario em
@@ -81,11 +87,7 @@
               <div class="admin-inline-fields">
                 <label class="admin-field">
                   <span>Slug</span>
-                  <input id="slugInput" type="text" placeholder="camila-eduardo" required />
-                </label>
-                <label class="admin-field">
-                  <span>Template visual</span>
-                  <select id="templateSelect"></select>
+                  <input id="slugInput" type="text" placeholder="laura-pedro" required />
                 </label>
                 <label class="admin-field admin-checkbox-field">
                   <span>Publicado</span>
@@ -93,22 +95,76 @@
                 </label>
               </div>
 
+              <div class="admin-two-columns">
+                <label class="admin-field">
+                  <span>Nome da noiva</span>
+                  <input id="brideNameInput" type="text" required />
+                </label>
+                <label class="admin-field">
+                  <span>Nome do noivo</span>
+                  <input id="groomNameInput" type="text" required />
+                </label>
+              </div>
+
+              <div class="admin-two-columns">
+                <label class="admin-field">
+                  <span>Data e horario</span>
+                  <input id="dateTimeInput" type="datetime-local" required />
+                </label>
+                <label class="admin-field">
+                  <span>Descricao da celebracao</span>
+                  <input id="ceremonyLabelInput" type="text" placeholder="Cerimonia e recepcao" />
+                </label>
+              </div>
+
+              <label class="admin-field">
+                <span>Nome do local</span>
+                <input id="venueNameInput" type="text" required />
+              </label>
+
+              <label class="admin-field">
+                <span>Endereco</span>
+                <input id="venueAddressInput" type="text" required />
+              </label>
+
+              <div class="admin-two-columns">
+                <label class="admin-field">
+                  <span>Link do mapa</span>
+                  <input id="mapsUrlInput" type="url" placeholder="https://maps.google.com/..." />
+                </label>
+                <label class="admin-field">
+                  <span>WhatsApp RSVP</span>
+                  <input id="rsvpUrlInput" type="url" placeholder="https://wa.me/..." />
+                </label>
+              </div>
+
+              <div class="admin-two-columns">
+                <label class="admin-field">
+                  <span>Chave PIX</span>
+                  <input id="pixKeyInput" type="text" placeholder="chavepix@email.com" />
+                </label>
+                <label class="admin-field">
+                  <span>Audio</span>
+                  <input id="audioSrcInput" type="url" placeholder="https://..." />
+                </label>
+              </div>
+
+              <label class="admin-field">
+                <span>PIX copia e cola</span>
+                <textarea id="pixCopyPasteInput" rows="4" spellcheck="false"></textarea>
+              </label>
+
               <div class="admin-actions">
                 <button id="loadButton" type="button" class="page-action">
                   Carregar por slug
                 </button>
-                <button id="fillTemplateButton" type="button" class="page-action">
-                  Usar template
+                <button id="resetButton" type="button" class="page-action">
+                  Restaurar padrao
                 </button>
                 <button type="submit" class="page-action admin-primary-button">
                   Salvar convite
                 </button>
               </div>
-
-              <label class="admin-field">
-                <span>Config JSON</span>
-                <textarea id="configInput" rows="22" spellcheck="false"></textarea>
-              </label>
             </form>
 
             <div class="admin-preview-card">
@@ -124,6 +180,10 @@
                   Abrir preview
                 </a>
               </div>
+              <label class="admin-field">
+                <span>Config gerado</span>
+                <textarea id="configPreview" rows="14" readonly spellcheck="false"></textarea>
+              </label>
               <label class="admin-field">
                 <span>SQL gerado</span>
                 <textarea id="sqlOutput" rows="12" readonly spellcheck="false"></textarea>
