@@ -144,6 +144,16 @@ body::before {
   background: #ffffff !important;
 }
 
+.single-page-book .stf__item,
+.single-page-book .stf__itemShadow,
+.invitation-page,
+.invitation-page::before,
+.invitation-page::after,
+.page-inner {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
 .invitation-page {
   position: relative;
   width: 100%;
@@ -151,6 +161,7 @@ body::before {
   overflow: hidden;
   background: #ffffff;
   color: var(--color-ink);
+  isolation: isolate;
 }
 
 .invitation-page::after {
@@ -422,8 +433,8 @@ body::before {
 }
 
 .timeless-monogram {
-  position: relative;
-  display: block;
+  display: grid;
+  place-items: center;
   width: 116px;
   height: 116px;
   border: 1px solid rgba(176, 122, 70, 0.24);
@@ -435,21 +446,30 @@ body::before {
   box-shadow: 0 14px 30px rgba(143, 96, 52, 0.08);
 }
 
+.timeless-monogram-stack {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 68px;
+  height: 54px;
+}
+
 .timeless-monogram-letter {
-  position: absolute;
-  top: 50%;
+  position: relative;
   font-size: 3rem;
   font-weight: 600;
   line-height: 1;
-  transform: translateY(-50%);
+  transform: none;
 }
 
 .timeless-monogram-letter--first {
-  left: 26px;
+  margin-right: -8px;
+  z-index: 1;
 }
 
 .timeless-monogram-letter--second {
-  right: 24px;
+  margin-left: -8px;
 }
 
 .timeless-overline,
@@ -747,16 +767,17 @@ body::before {
     height: 98px;
   }
 
+  .timeless-monogram-stack {
+    min-width: 58px;
+    height: 48px;
+  }
+
   .timeless-monogram-letter {
     font-size: 2.55rem;
   }
 
   .timeless-monogram-letter--first {
-    left: 22px;
-  }
-
-  .timeless-monogram-letter--second {
-    right: 20px;
+    margin-right: -7px;
   }
 
   .timeless-save-lockup {

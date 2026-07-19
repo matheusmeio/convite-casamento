@@ -433,8 +433,10 @@ function renderMonogram() {
 
   return `
     <div class="timeless-monogram" aria-hidden="true">
-      <span class="timeless-monogram-letter timeless-monogram-letter--first">${escapeHtml(brideInitial)}</span>
-      <span class="timeless-monogram-letter timeless-monogram-letter--second">${escapeHtml(groomInitial)}</span>
+      <div class="timeless-monogram-stack">
+        <span class="timeless-monogram-letter timeless-monogram-letter--first">${escapeHtml(brideInitial)}</span>
+        <span class="timeless-monogram-letter timeless-monogram-letter--second">${escapeHtml(groomInitial)}</span>
+      </div>
     </div>
   `;
 }
