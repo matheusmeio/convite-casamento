@@ -17,6 +17,7 @@
 - Evidence summary:
   - Local runtime logs show `pageBg=rgb(255,255,255)` and `pageBackface=hidden` on initial render and on flip.
   - `wrapperCount` and `itemCount` show extra `page-flip` wrapper nodes beyond the invitation page itself.
+  - The `StPageFlip` documentation states that `usePortrait` mode uses cloning of HTML elements, which matches the extra wrapper/cloned-layer behavior observed during portrait rendering.
   - Monogram geometry confirms the two initials still use unequal bounds and overlap asymmetrically.
 
 - Hypothesis status:
@@ -24,4 +25,4 @@
   - H2: CONFIRMED (most likely)
   - H3: INCONCLUSIVE
   - H4: CONFIRMED
-  - H5: INCONCLUSIVE
+  - H5: CONFIRMED (portrait wrapper/cloning behavior is consistent with the bleed symptom)

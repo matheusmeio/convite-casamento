@@ -776,6 +776,7 @@ function initFlipbook() {
     showCover: Boolean(book.showCover),
     maxShadowOpacity: book.maxShadowOpacity ?? 0.22,
     mobileScrollSupport: book.mobileScrollSupport !== false,
+    swipeDistance: book.swipeDistance || 12,
     clickEventForward: book.clickEventForward !== false,
     disableFlipByClick: Boolean(book.disableFlipByClick),
     autoSize: true
