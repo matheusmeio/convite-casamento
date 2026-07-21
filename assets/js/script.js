@@ -1,5 +1,13 @@
 const SUPABASE_CONFIG = window.publicSupabaseConfig;
 const DEFAULT_TEMPLATE_ID = "timeless-paper";
+const TIMELESS_PAGE_ARTWORK = {
+  cover: "images/_.jpeg",
+  "save-date": "images/_ (1).jpeg",
+  details: "images/_ (2).jpeg",
+  countdown: "images/_ (3).jpeg",
+  actions: "images/_ (4).jpeg",
+  closing: "images/_ (5).jpeg"
+};
 
 const state = {
   pageFlip: null,
@@ -246,6 +254,7 @@ function buildTemplatePages() {
     { id: "cover", layout: "cover", type: "content" },
     { id: "save-date", layout: "save-date", type: "content" },
     { id: "details", layout: "details", type: "content" },
+    { id: "countdown", layout: "countdown", type: "content" },
     { id: "actions", layout: "actions", type: "content" },
     { id: "closing", layout: "closing", type: "content" }
   ];
@@ -264,6 +273,9 @@ function createTimelessPage(page, index, total) {
       break;
     case "details":
       element.innerHTML = renderTimelessDetails(index, total);
+      break;
+    case "countdown":
+      element.innerHTML = renderTimelessCountdown(index, total);
       break;
     case "actions":
       element.innerHTML = renderTimelessActions(index, total);
@@ -349,25 +361,29 @@ function createSplitPage(page, index, total) {
 
 function renderTimelessCover(index, total) {
   const hero = window.weddingConfig.hero || {};
-  return `
-    <div class="page-inner timeless-page-shell timeless-page-shell--cover">
-      <div class="timeless-page-main timeless-page-main--center">
+  return renderTimelessPageFrame(
+    "cover",
+    "timeless-page-shell--cover",
+    "timeless-page-main timeless-page-main--center",
+    `
         ${renderMonogram()}
         <p class="timeless-overline">${escapeHtml(hero.overline || "Convidamos voce para o nosso casamento")}</p>
         <h1 class="timeless-names">${renderNamesMarkup()}</h1>
         <div class="timeless-copy">
         </div>
-      </div>
-      ${renderPageFooter(index, total)}
-    </div>
-  `;
+    `,
+    index,
+    total
+  );
 }
 
 function renderTimelessSaveDate(index, total) {
   const dateParts = getEventDateParts();
-  return `
-    <div class="page-inner timeless-page-shell timeless-page-shell--save-date">
-      <div class="timeless-page-main timeless-page-main--center">
+  return renderTimelessPageFrame(
+    "save-date",
+    "timeless-page-shell--save-date",
+    "timeless-page-main timeless-page-main--center",
+    `
         <div class="timeless-save-lockup">
           <span class="timeless-save-word timeless-save-word--top">SAVE</span>
           <span class="timeless-save-script">the</span>
@@ -376,18 +392,20 @@ function renderTimelessSaveDate(index, total) {
         <p class="timeless-date-feature">
           <span>${escapeHtml(dateParts.saveDateLine)}</span>
         </p>
-      </div>
-      ${renderPageFooter(index, total)}
-    </div>
-  `;
+    `,
+    index,
+    total
+  );
 }
 
 function renderTimelessDetails(index, total) {
   const event = window.weddingConfig.event || {};
   const dateParts = getEventDateParts();
-  return `
-    <div class="page-inner timeless-page-shell timeless-page-shell--details">
-      <div class="timeless-page-main">
+  return renderTimelessPageFrame(
+    "details",
+    "timeless-page-shell--details",
+    "timeless-page-main",
+    `
         ${renderMonogram()}
         <p class="timeless-blessing">Com a bencao de suas familias</p>
         <h2 class="timeless-names timeless-names--details">${renderNamesMarkup()}</h2>
@@ -402,43 +420,64 @@ function renderTimelessDetails(index, total) {
             <p class="timeless-location-sub">${escapeHtml(event.venueAddress || "")}</p>
           </div>
         </div>
+    `,
+    index,
+    total
+  );
+}
+
+function renderTimelessCountdown(index, total) {
+  return renderTimelessPageFrame(
+    "countdown",
+    "timeless-page-shell--countdown",
+    "timeless-page-main",
+    `
+      <p class="timeless-overline">Falta pouco</p>
+      <h2 class="timeless-title">A contagem regressiva para o nosso sim ja comecou</h2>
+      <div class="timeless-copy">
+        <p>Cada dia nos aproxima ainda mais do momento em que vamos celebrar esse amor ao lado de quem faz parte da nossa historia.</p>
       </div>
-      ${renderPageFooter(index, total)}
-    </div>
-  `;
+      ${renderCountdownBlock()}
+    `,
+    index,
+    total
+  );
 }
 
 function renderTimelessActions(index, total) {
-  const event = window.weddingConfig.event || {};
-  return `
-    <div class="page-inner timeless-page-shell timeless-page-shell--actions">
-      <div class="timeless-page-main">
+  return renderTimelessPageFrame(
+    "actions",
+    "timeless-page-shell--actions",
+    "timeless-page-main",
+    `
         <p class="timeless-overline">Informacoes importantes</p>
         <h2 class="timeless-title">Toque nos botoes para interagir</h2>
         ${renderActionLinks()}
         ${renderPixBlock()}
-      </div>
-      ${renderPageFooter(index, total)}
-    </div>
-  `;
+    `,
+    index,
+    total
+  );
 }
 
 function renderTimelessClosing(index, total) {
   const event = window.weddingConfig.event || {};
   const dateParts = getEventDateParts();
-  return `
-    <div class="page-inner timeless-page-shell timeless-page-shell--closing">
-      <div class="timeless-page-main timeless-page-main--center">
+  return renderTimelessPageFrame(
+    "closing",
+    "timeless-page-shell--closing",
+    "timeless-page-main timeless-page-main--center",
+    `
         ${renderMonogram()}
         <p class="timeless-script-line">Esperamos por voce</p>
         <div class="timeless-copy timeless-copy--closing">
           <p>${escapeHtml(dateParts.longDateLine)}</p>
           <p>${escapeHtml(event.venueName || "")}</p>
         </div>
-      </div>
-      ${renderPageFooter(index, total)}
-    </div>
-  `;
+    `,
+    index,
+    total
+  );
 }
 
 function renderMonogram() {
@@ -451,6 +490,34 @@ function renderMonogram() {
         <span class="timeless-monogram-letter timeless-monogram-letter--first">${escapeHtml(brideInitial)}</span>
         <span class="timeless-monogram-letter timeless-monogram-letter--second">${escapeHtml(groomInitial)}</span>
       </div>
+    </div>
+  `;
+}
+
+function renderTimelessPageFrame(pageId, shellClass, mainClass, content, index, total) {
+  return `
+    <div class="page-inner">
+      ${renderTimelessPageArtwork(pageId)}
+      <div class="timeless-page-shell ${shellClass}">
+        <div class="${mainClass}">
+          ${content}
+        </div>
+        ${renderPageFooter(index, total)}
+      </div>
+    </div>
+  `;
+}
+
+function renderTimelessPageArtwork(pageId) {
+  const artworkSrc = TIMELESS_PAGE_ARTWORK[pageId];
+
+  if (!artworkSrc) {
+    return "";
+  }
+
+  return `
+    <div class="timeless-page-art" aria-hidden="true">
+      <img src="${escapeHtml(artworkSrc)}" alt="" />
     </div>
   `;
 }
